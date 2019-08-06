@@ -276,6 +276,7 @@ export default {
                 console.log(response.queryResult.fulfillmentMessages);
                 this.messages.push(response);
                 this.loading = false
+
             });
         }
     }
