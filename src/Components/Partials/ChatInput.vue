@@ -52,7 +52,7 @@
     box-sizing: border-box
     border-radius: 40px
     flex: 1 0 0
-    background-color: rgba(#FFFFFF, .4)
+    background-color: #3a3b3c
 
 .element::-webkit-input-placeholder
     color: white !important
@@ -67,10 +67,10 @@
     outline: none
     padding-left: 8px
     padding-right: 8px
-    color: var(--text)
+    color: #FFFFFF
 
 .input::placeholder
-    color: white
+    color: #98999a
 
 .button-container
     padding: 8px

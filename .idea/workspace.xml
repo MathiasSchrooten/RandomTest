@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="971a0d2a-e1be-4c7d-92a1-675ec78ea2b1" name="Default" comment="" />
+    <list default="true" id="971a0d2a-e1be-4c7d-92a1-675ec78ea2b1" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/App/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/App/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/RichComponents/Suggestion.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/RichComponents/Suggestion.vue" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -12,6 +16,14 @@
     <execution>
       <executable />
     </execution>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="HTML File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -24,10 +36,12 @@
   <component name="ProjectId" id="1PPUFzA2bfjvcSQpGNgTAp8yJk2" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///Users/mathiasschrooten/Downloads/dialogflow-web-v2-master 2/src/Components/RichComponents/List.vue" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -92,7 +106,7 @@
       <workItem from="1564735269205" duration="13798000" />
       <workItem from="1564993662740" duration="16816000" />
       <workItem from="1565080843890" duration="2974000" />
-      <workItem from="1565775130882" duration="4546000" />
+      <workItem from="1565775130882" duration="7676000" />
     </task>
     <servers />
   </component>

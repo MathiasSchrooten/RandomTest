@@ -58,7 +58,7 @@
         margin-top: 20px
         float: left
         min-width: 400px
-        background-color: #767575
+        background-color: #323334
 
     &.me
         border-radius: 30px 0px 30px 30px
