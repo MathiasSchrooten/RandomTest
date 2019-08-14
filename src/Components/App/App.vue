@@ -1,7 +1,7 @@
 <template>
     <div style="height: 100%;">
         <div style="display: flex;justify-content: flex-end; width: 100%; height: 100%;">
-            <main id="app" style="background-color: #1C1D1F;  display: flex; flex-direction: column; width: 100%;" >
+            <main id="app" >
 <!--                background-color: #1C1D1F; opacity: 0.9; box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5); filter: blur(10px);-->
                 <div style=" width: 100%; overflow-y: scroll">
                     <TopHead v-if="app && messages.length > 0" :app="app"></TopHead>
@@ -82,6 +82,13 @@ body
     font-display: swap
     background-color: #1C1D1F
 
+#app
+    background-color: rgba(0, 0, 0, .6)
+    backdrop-filter: blur(5px);
+    display: flex
+    flex-direction: column
+    width: 100%
+
 .container
     max-width: 100%
     margin-left: auto
@@ -116,18 +123,13 @@ body
 .chat-container
     padding-top: 60px
     padding-bottom: 1px
-    background-color: #1C1D1F
     min-height: 80vh
     max-height: 80vh
 
 
 .message
     width: 100%
-
     display: inline-block
-
-
-
 
 .audio-toggle
     position: fixed

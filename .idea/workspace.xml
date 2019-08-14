@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="971a0d2a-e1be-4c7d-92a1-675ec78ea2b1" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/index2.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/App/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/App/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Partials/ChatInput.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Partials/ChatInput.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/RichComponents/Bubble.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/RichComponents/Bubble.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/style/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/RichComponents/Suggestion.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/RichComponents/Suggestion.vue" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -110,7 +106,7 @@
       <workItem from="1564735269205" duration="13798000" />
       <workItem from="1564993662740" duration="16816000" />
       <workItem from="1565080843890" duration="2974000" />
-      <workItem from="1565775130882" duration="7013000" />
+      <workItem from="1565775130882" duration="7676000" />
     </task>
     <servers />
   </component>
