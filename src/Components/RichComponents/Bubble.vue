@@ -4,9 +4,10 @@
         <img v-if="from === 'bot'" style="float: left; padding-top: 0px; padding-left: 5px; margin-right: 10px; margin-top: 20px; width: 50px; height: 50px; border-radius:15px;" src="https://wisemenchatbot.s3-eu-west-1.amazonaws.com/Wisemen+chat+bubble.svg" alt="">
 
         <span class="bubble" :class="{'me': from === 'me', 'loading': loading}">
-                    <br v-if="imageUrl != false && from =='bot'"/>
-        <img style="margin-top: 10px; margin-left: 15px; width: 100%; max-width: 200px;" v-if="imageUrl != false && from =='bot'" v-bind:src="imageUrl" alt="">
 
+        <img style="margin-top: 10px; margin-left: 15px; width: 100%; max-width: 200px;" v-if="imageUrl != false && from =='bot'" v-bind:src="imageUrl" alt="">
+        <br v-if="imageUrl != false && from == 'bot'">
+        <br v-if="imageUrl != false && from == 'bot'">
         <template v-for="line in text.split('\n')">{{line}}</template>
 
         <button name="playButton" v-if="from == 'bot' && mp3url != false" class="btn btn-primary btn-sm" @click.prevent="audio.isPlaying ? pause(audio) : play(audio)" v-for="audio in audios" :key="audio.id"><span class="fa fa-play-circle-o"></span>

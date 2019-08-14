@@ -84,7 +84,7 @@ body
 
 #app
     background-color: rgba(0, 0, 0, .6)
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px)
     display: flex
     flex-direction: column
     width: 100%
