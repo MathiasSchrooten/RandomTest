@@ -3,7 +3,7 @@
         <div style="display: flex;justify-content: flex-end; width: 100%; height: 100%;">
             <div style="background-color: #000000; opacity: 0.7; display: flex; flex-direction: column; width: 50%; height: 100%"></div>
 
-            <main id="app" style="background-color: #1C1D1F;  display: flex; flex-direction: column; width: 50%; height: 100%;" >
+            <main id="app" style="background-color: #1C1D1F;  display: flex; flex-direction: column; width: 50%;" >
 <!--                background-color: #1C1D1F; opacity: 0.9; box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5); filter: blur(10px);-->
                 <div style=" width: 100%; overflow-y: scroll">
                     <TopHead v-if="app && messages.length > 0" :app="app"></TopHead>
@@ -64,7 +64,7 @@
 
                 </div>
 
-                <ChatInput style="height: 10%;" @submit="send" :suggestions="suggestions"></ChatInput>
+                <ChatInput @submit="send" :suggestions="suggestions"></ChatInput>
 
             </main>
 
@@ -120,7 +120,8 @@ body
     padding-top: 60px
     padding-bottom: 1px
     background-color: #1C1D1F
-    min-height: 900px
+    min-height: 80vh
+    max-height: 80vh
 
 
 .message
@@ -249,11 +250,9 @@ export default {
         /* This function is triggered, when request is started or finished */
         loading(){
             setTimeout(() => {
-                let app = document.querySelector('#app'); // <- We need to scroll down #app, to prevent the whole page jumping to bottom, when using in iframe
-                app.querySelector('#bottomAnchor').scrollIntoView({
-                    behavior: 'smooth' 
-                })
-            }, 1) // <- wait for render (timeout) and then smoothly scroll #app down to #bottom selector, used as anchor
+                let app = document.querySelector('#app') // <- We need to scroll down #app, to prevent the whole page jumping to bottom, when using in iframe
+                app.querySelector('#bottomAnchor').scrollIntoView()
+            }, 2) // <- wait for render (timeout) and then smoothly scroll #app down to the last message
         },
     },
     methods: {

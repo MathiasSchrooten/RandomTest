@@ -1,22 +1,20 @@
 <template>
         <div class="bottomchat">
-            <div id="zehContainer" style="width: 90%;" class="container">
+            <div class="container">
                 <!-- Here are the suggestions -->
                 <div class="suggestions">
                     <Suggestion v-if="suggestions.text_suggestions" v-for="(suggestion, index) in suggestions.text_suggestions" :key="index" @click.native="$emit('submit', suggestion)" :title="suggestion" />
                     <Suggestion v-if="suggestions.link_suggestion" :title="suggestions.link_suggestion.destinationName" :url="suggestions.link_suggestion.uri" />
                 </div>
-                <div style="height: 100px;"  class="flexible">
+                <div class="flexible">
                     <!-- Text input -->
                     <div class="input-container">
-                        <input style="width:90%" :aria-label="(config.i18n[lang()] && config.i18n[lang()].inputTitle) || config.i18n[config.app.fallback_lang].inputTitle" class="input" type="text" :placeholder="(config.i18n[lang()] && config.i18n[lang()].inputTitle) || config.i18n[config.app.fallback_lang].inputTitle" v-model="query" @keypress.enter="submit()" />
-                        <div @click="submit()" style="width:5%; margin-right: 15px;" >
+                        <input :aria-label="(config.i18n[lang()] && config.i18n[lang()].inputTitle) || config.i18n[config.app.fallback_lang].inputTitle" class="input" type="text" :placeholder="(config.i18n[lang()] && config.i18n[lang()].inputTitle) || config.i18n[config.app.fallback_lang].inputTitle" v-model="query" @keypress.enter="submit()" />
+                        <div @click="submit()">
                             <input type="image" src="https://wisemenchatbot.s3-eu-west-1.amazonaws.com/submit+button.svg" />
                         </div>
                     </div>
                 </div>
-<!--                <div style="width: 50px; height: 50px; background-color: greenyellow"></div>-->
-
             </div>
         </div>
 
@@ -25,9 +23,10 @@
 
 <style lang="sass" scoped>
 .bottomchat
-    position: relative
+    position: fixed
     bottom: 0
-    height: 100%
+    width: 50%
+    background-color: var(--background)
 
 
 .flexible
@@ -59,10 +58,8 @@
     color: white !important
 
 .input
-    font-size: 18px
-    font-family: "Serif72 Beta"
-    font-weight: bold
-    margin: 10px 7px 10px 7px
+    font-size: 16px
+    font-weight: 500
     width: 100%
     box-sizing: border-box
     background-color: transparent
@@ -70,7 +67,7 @@
     outline: none
     padding-left: 8px
     padding-right: 8px
-    color: white
+    color: var(--text)
 
 .input::placeholder
     color: white
