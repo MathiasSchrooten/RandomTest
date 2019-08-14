@@ -1,9 +1,7 @@
 <template>
     <div style="height: 100%;">
         <div style="display: flex;justify-content: flex-end; width: 100%; height: 100%;">
-            <div style="background-color: #000000; opacity: 0.7; display: flex; flex-direction: column; width: 50%; height: 100%"></div>
-
-            <main id="app" style="background-color: #1C1D1F;  display: flex; flex-direction: column; width: 50%;" >
+            <main id="app" style="background-color: #1C1D1F;  display: flex; flex-direction: column; width: 100%;" >
 <!--                background-color: #1C1D1F; opacity: 0.9; box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5); filter: blur(10px);-->
                 <div style=" width: 100%; overflow-y: scroll">
                     <TopHead v-if="app && messages.length > 0" :app="app"></TopHead>

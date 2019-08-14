@@ -1,0 +1,14 @@
+.background {
+    background-image: url("../assets/wisemen-cover.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.flex-container {
+    display: flex;
+    height: 100vh;
+}
+
+.flex-50 {
+    width: calc(50%);
+}
