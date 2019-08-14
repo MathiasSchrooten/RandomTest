@@ -14,8 +14,6 @@
     margin-bottom: 15px
     font-size: 18px
     padding: 15px
-    font-family: "Serif72 Beta"
-    font-weight: bold
 
 
 .suggestion[href]
