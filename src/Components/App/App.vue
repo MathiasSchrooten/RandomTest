@@ -56,7 +56,6 @@
                                     <!-- Default / Webhook bubble (Loading) -->
                                     <td><Bubble loading="true" /></td>
                                 </tr>
-                                <div id="bottomAnchor" style="height:1px; width: 100%"></div>
                             </table>
                         </section>
 
@@ -251,7 +250,10 @@ export default {
         loading(){
             setTimeout(() => {
                 let app = document.querySelector('#app') // <- We need to scroll down #app, to prevent the whole page jumping to bottom, when using in iframe
-                app.querySelector('#bottomAnchor').scrollIntoView()
+                if (app.querySelector('.message')){
+                    let message = app.querySelectorAll('.message')[app.querySelectorAll('.message').length - 1].offsetTop - 70
+                    window.scrollTo({top: message, behavior: 'smooth'})
+                }
             }, 2) // <- wait for render (timeout) and then smoothly scroll #app down to the last message
         },
     },

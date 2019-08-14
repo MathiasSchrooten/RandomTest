@@ -1,14 +1,13 @@
 <template>
-    <span style="font-size: 100.5%; font-family: 'Serif72 Beta'; letter-spacing: 0.08rem;font-weight: bold">
+    <span>
         <!--imc image next to bot response-->
         <img v-if="from === 'bot'" style="float: left; padding-top: 0px; padding-left: 5px; margin-right: 10px; margin-top: 20px; width: 50px; height: 50px; border-radius:15px;" src="https://wisemenchatbot.s3-eu-west-1.amazonaws.com/Wisemen+chat+bubble.svg" alt="">
 
         <span class="bubble" :class="{'me': from === 'me', 'loading': loading}">
                     <br v-if="imageUrl != false && from =='bot'"/>
         <img style="margin-top: 10px; margin-left: 15px; width: 100%; max-width: 200px;" v-if="imageUrl != false && from =='bot'" v-bind:src="imageUrl" alt="">
-            <br>
 
-        <template  v-for="line in text.split('\n')">{{line}}<br></template>
+        <template v-for="line in text.split('\n')">{{line}}</template>
 
         <button name="playButton" v-if="from == 'bot' && mp3url != false" class="btn btn-primary btn-sm" @click.prevent="audio.isPlaying ? pause(audio) : play(audio)" v-for="audio in audios" :key="audio.id"><span class="fa fa-play-circle-o"></span>
 
@@ -29,7 +28,7 @@
 
     </span>
         <!--user-image next to user response-->
-        <img v-if="from == 'me'" style="float: right; margin-top: -35px; padding-top: 3px; position: absolute; right: 5%;  width: 30px; height: 30px; border-radius:15px;" src="https://wisemenchatbot.s3-eu-west-1.amazonaws.com/chatbubble+-+me.svg">
+        <img class="image-me" v-if="from == 'me'" src="https://wisemenchatbot.s3-eu-west-1.amazonaws.com/chatbubble+-+me.svg">
 
     </span>
 
@@ -38,8 +37,6 @@
 <style lang="sass" scoped>
 
 .bubble
-
-
     color: white
     display: inline-block
     position: relative
@@ -56,17 +53,17 @@
 
     &:not(.me)
         border-radius: 0px 30px 30px 30px
-        padding: 1px 8px 8px 15px
+        padding: 1rem
         margin-bottom: 60px
-        margin-top: 45px
+        margin-top: 20px
         float: left
         min-width: 400px
         background-color: #767575
 
     &.me
+        border-radius: 30px 0px 30px 30px
         background-color: #FFD301
-        padding: 0px 15px 15px 15px
-        border-radius: 40px 0px 40px 40px
+        padding: 1rem
         @media(min-width: 370px)
             position: absolute
             right: 10%
@@ -95,6 +92,16 @@
         opacity: 1
     100%
         opacity: 0
+
+.image-me
+    height: 50px
+    width: 50px
+    float: right
+    margin-top: -35px
+    padding-top: 3px
+    position: absolute
+    right: 3%
+
 </style>
 
 <script>
