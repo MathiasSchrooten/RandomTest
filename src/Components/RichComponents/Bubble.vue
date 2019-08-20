@@ -61,6 +61,7 @@
         min-width: 400px
         background-color: #323334
 
+
     &.me
         border-radius: 30px 0px 30px 30px
         background-color: #FFD301
