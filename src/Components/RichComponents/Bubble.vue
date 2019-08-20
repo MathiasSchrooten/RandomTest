@@ -58,7 +58,6 @@
         margin-bottom: 60px
         margin-top: 20px
         float: left
-        min-width: 400px
         background-color: #323334
 
 
@@ -66,9 +65,8 @@
         border-radius: 30px 0px 30px 30px
         background-color: #FFD301
         padding: 1rem
-        @media(min-width: 370px)
-            position: absolute
-            right: 10%
+        position: absolute
+        right: 3rem
 
         @media (min-width: 1300px)
             position: absolute
