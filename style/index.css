@@ -12,3 +12,13 @@
 .flex-50 {
     width: calc(50%);
 }
+
+@media only screen and (max-width: 650px) {
+    .flex-50 {
+        width: 100%;
+    }
+
+    .left-container {
+        display: none;
+    }
+}

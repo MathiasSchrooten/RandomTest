@@ -256,10 +256,10 @@ export default {
                 }
             }, 2) // <- wait for render (timeout) and then smoothly scroll #app down to the last message
         },
+
     },
     methods: {
         send(q){
-            console.log("sending =>" + q);
             let request = {
                 "text": q,
                 "languageCode": this.lang()
@@ -270,11 +270,9 @@ export default {
             // Make the request to gateway with formatting enabled */
             fetch('https://scvirtualagent.chatwise.be/getBotResponse', {method: 'POST', mode: 'cors', headers: {'content-type': 'application/json'}, body: JSON.stringify(request)})
             .then(response => {
-                console.log("response.json() = ");
                 return response.json();
             })
             .then(response => {
-                console.log(response.queryResult.fulfillmentMessages);
                 this.messages.push(response);
                 this.loading = false
 
