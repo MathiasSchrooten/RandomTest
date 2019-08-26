@@ -11,8 +11,8 @@
                         <Welcome v-if="app && messages.length == 0" :app="app"></Welcome>
 
                         <!-- Messages Table -->
-                        <section class="messages" v-else>
-                            <table v-for="m in messages" class="message">
+                        <div id="tContainer" ref="mContainer" class="messages" v-else>
+                            <table  v-for="m in messages" class="message">
                                 <tr>
                                     <!-- My message -->
                                     <td><Bubble :text="m.queryResult.queryText"  from="me" /></td>
@@ -45,6 +45,7 @@
                                     </td>
                                 </tr>
                             </table>
+                            <div id="bottom"></div>
                             <table class="message" v-if="loading">
                                 <tr>
                                     <!-- My message (Loading) -->
@@ -55,7 +56,7 @@
                                     <td><Bubble loading="true" /></td>
                                 </tr>
                             </table>
-                        </section>
+                        </div>
 
                     </section>
 
@@ -244,17 +245,6 @@ export default {
         /* This function is triggered, when new messages arrive */
         messages(messages){
             //TODO: comment this for dev, uncomment for prod
-            // if(this.history()) localStorage.setItem('message_history', JSON.stringify(messages)) // <- Save history if the feature is enabled
-        },
-        /* This function is triggered, when request is started or finished */
-        loading(){
-            setTimeout(() => {
-                let app = document.querySelector('#app') // <- We need to scroll down #app, to prevent the whole page jumping to bottom, when using in iframe
-                if (app.querySelector('.message')){
-                    let message = app.querySelectorAll('.message')[app.querySelectorAll('.message').length - 1].offsetTop - 70
-                    window.scrollTo({top: message, behavior: 'smooth'})
-                }
-            }, 2) // <- wait for render (timeout) and then smoothly scroll #app down to the last message
         },
 
     },
@@ -277,6 +267,11 @@ export default {
                 this.loading = false
 
             });
+
+            this.$nextTick(() => {
+                let element = document.getElementById('bottom');
+                element.scrollIntoView(true);
+            })
         }
     }
 }
