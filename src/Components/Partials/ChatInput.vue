@@ -27,7 +27,9 @@
     bottom: 0
     width: 50%
     background-color: var(--background)
-
+    @media screen and (max-width: 650px)
+        width: 100%
+        animation: 1.5s ease infinite
 
 .flexible
     display: flex
@@ -90,6 +92,8 @@
         &.mic_active
             background-color: #F44336
             color: white
+
+
 </style>
 
 <script>

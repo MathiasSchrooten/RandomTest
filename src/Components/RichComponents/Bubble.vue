@@ -8,7 +8,7 @@
         <img style="margin-top: 10px; margin-left: 15px; width: 100%; max-width: 200px;" v-if="imageUrl != false && from =='bot'" v-bind:src="imageUrl" alt="">
         <br v-if="imageUrl != false && from == 'bot'">
         <br v-if="imageUrl != false && from == 'bot'">
-        <template v-for="line in text.split('\n')">{{line}}</template>
+        <template v-for="line in text">{{line}}</template>
 
         <button name="playButton" v-if="from == 'bot' && mp3url != false" class="btn btn-primary btn-sm" @click.prevent="audio.isPlaying ? pause(audio) : play(audio)" v-for="audio in audios" :key="audio.id"><span class="fa fa-play-circle-o"></span>
 
@@ -58,16 +58,15 @@
         margin-bottom: 60px
         margin-top: 20px
         float: left
-        min-width: 400px
         background-color: #323334
+
 
     &.me
         border-radius: 30px 0px 30px 30px
         background-color: #FFD301
         padding: 1rem
-        @media(min-width: 370px)
-            position: absolute
-            right: 10%
+        position: absolute
+        right: 3rem
 
         @media (min-width: 1300px)
             position: absolute

@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="971a0d2a-e1be-4c7d-92a1-675ec78ea2b1" name="Default" comment="" />
+=======
+    <list default="true" id="971a0d2a-e1be-4c7d-92a1-675ec78ea2b1" name="Default" comment="">
+<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/src/Components/App/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/App/App.vue" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/RichComponents/Bubble.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/RichComponents/Bubble.vue" afterDir="false" />
+>>>>>>> development
+    </list>
+>>>>>>> d636d324fb838771eabd19117efe7f2ca0e04998
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -253,7 +265,8 @@
       <workItem from="1564735269205" duration="13798000" />
       <workItem from="1564993662740" duration="16816000" />
       <workItem from="1565080843890" duration="2974000" />
-      <workItem from="1565775130882" duration="8861000" />
+      <workItem from="1565775130882" duration="10514000" />
+      <workItem from="1565946999110" duration="122000" />
     </task>
     <servers />
   </component>
@@ -313,12 +326,16 @@
         <entry key="MAIN">
           <value>
             <State>
+<<<<<<< HEAD
               <option name="RECENTLY_FILTERED_USER_GROUPS">
                 <collection />
               </option>
               <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
                 <collection />
               </option>
+=======
+              <option name="COLUMN_ORDER" />
+>>>>>>> development
             </State>
           </value>
         </entry>
