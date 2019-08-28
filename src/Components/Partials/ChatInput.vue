@@ -27,7 +27,7 @@
     bottom: 0
     width: 50%
     background-color: var(--background)
-    @media screen and (max-width: 650px)
+    @media screen and (max-width: 1000px)
         width: 100%
         animation: 1.5s ease infinite
 

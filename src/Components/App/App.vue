@@ -62,7 +62,9 @@
 
                 </div>
 
-                <ChatInput @submit="send" :suggestions="suggestions"></ChatInput>
+<!--                <div class="bottomchatx">-->
+                    <ChatInput class="bottomchat" @submit="send" :suggestions="suggestions"></ChatInput>
+<!--                </div>-->
 
             </main>
 
@@ -159,8 +161,7 @@ body
 
 
 
-
-    import Welcome from './../Welcome/Welcome.vue'
+import Welcome from './../Welcome/Welcome.vue'
 import TopHead from './../Partials/TopHead.vue'
 import ChatInput from './../Partials/ChatInput.vue'
 
