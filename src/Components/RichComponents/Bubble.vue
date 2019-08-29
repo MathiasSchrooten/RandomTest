@@ -8,7 +8,7 @@
         <img style="margin-top: 10px; margin-left: 15px; width: 100%; max-width: 200px;" v-if="imageUrl != false && from =='bot'" v-bind:src="imageUrl" alt="">
         <br v-if="imageUrl != false && from == 'bot'">
         <br v-if="imageUrl != false && from == 'bot'">
-        <template v-for="line in text">{{line}}</template>
+        <template class="textInBubble" v-for="line in text">{{line}}</template>
 
         <button name="playButton" v-if="from == 'bot' && mp3url != false" class="btn btn-primary btn-sm" @click.prevent="audio.isPlaying ? pause(audio) : play(audio)" v-for="audio in audios" :key="audio.id"><span class="fa fa-play-circle-o"></span>
 
@@ -17,7 +17,7 @@
         </button>
 
 
-        <span style="font-size: 0.8em" v-if="pdfUrl != false && from =='bot'">
+        <span v-if="pdfUrl != false && from =='bot'">
             <br>
             <a v-bind:href="pdfUrl" target="_blank">Open PDF</a>
         </span>
@@ -37,11 +37,20 @@
 
 <style lang="sass" scoped>
 
+.textInBubble
+    font-size: 30px
+
 .bubble
     color: white
     display: inline-block
     position: relative
     max-width: 60%
+    font-size: 1em
+
+
+    @media screen and (max-width: 1000px)
+        font-size: 2em
+
 
     &::before
         /*content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyOHB4IiB2aWV3Qm94PSIwIDAgMjQgMjgiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8ZyBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMjQuMDAwMDAwLCAtMTAxLjAwMDAwMCkiPgogICAgICAgICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNC4wMDAwMDAsIDEwMS4wMDAwMDApIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0wLjUsMS4yMTMzNzE0OCBDMC41LDcuNjA2NjkwNjcgMC41LDguNzU1Nzk0NzggMC41LDI2LjkzMjQ3OTIgTDIyLjU4NjkzMDIsOC41MjY3MDQwNCBDMTMuMDQwODkxNSw4LjU4NTgzODUzIDUuNjY5NjIyMDQsNi4xNTI1ODA2MyAwLjUsMS4yMTMzNzE0OCBaIiBzdHJva2U9IiNFOEVBRUQiPjwvcGF0aD4KICAgICAgICAgICAgICAgIDxwb2x5Z29uIGZpbGw9IiNGRkZGRkYiIGZpbGwtcnVsZT0ibm9uemVybyIgcG9pbnRzPSIxIDkgMjQgOSAxIDI4Ij48L3BvbHlnb24+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==")*/
@@ -59,6 +68,10 @@
         margin-top: 20px
         float: left
         background-color: #323334
+        @media screen and (max-width: 1000px)
+            margin-top: 60px
+
+
 
 
     &.me
@@ -68,9 +81,11 @@
         position: absolute
         right: 3rem
 
+
+
         @media (min-width: 1300px)
             position: absolute
-            right: 8%
+            //right: 8%
 
 
         //background-color: rgba(#FFFFFF, .4)
@@ -79,6 +94,10 @@
         margin-top: -30px
         margin-right: 20px
         margin-bottom: 20px
+
+        @media screen and (max-width: 1000px)
+            right: 6%
+            margin-top: -50px
 
     &.loading
         width: 20px
@@ -100,7 +119,7 @@
     margin-top: -35px
     padding-top: 3px
     position: absolute
-    right: 3%
+    right: 2%
 
 </style>
 

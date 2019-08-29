@@ -11,9 +11,11 @@
     cursor: pointer
     margin-right: 5px
     margin-bottom: 15px
-    font-size: 18px
+    font-size: 1em
     padding: 15px
 
+    @media screen and (max-width: 1000px)
+        font-size: 1.7em
 
 .suggestion[href]
     background-color: #565758

@@ -8,8 +8,7 @@
                     <section style="height: 20%" class="container chat-container">
 
                         <!-- Welcome component is for onboarding experience and language picker -->
-                        <Welcome v-if="app && messages.length == 0" :app="app"></Welcome>
-
+                        <Welcome v-if="messages.length === 0" :app="app"></Welcome>
                         <!-- Messages Table -->
                         <div id="tContainer" ref="mContainer" class="messages" v-else>
                             <table  v-for="m in messages" class="message">
@@ -110,7 +109,7 @@ body
     font-family: 'Material Icons'
     font-weight: normal
     font-style: normal
-    font-size: 24px
+    font-size: 50px
     line-height: 1
     letter-spacing: normal
     text-transform: none

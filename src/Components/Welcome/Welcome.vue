@@ -1,25 +1,12 @@
 <template>
     <div class="overlay">
-        <!-- Agent Icon -->
-        <img :alt="app.displayName" class="app-icon" :src="app.avatarUri" v-if="app.avatarUri" />
-        <img :alt="app.displayName" class="app-icon" src="https://console.dialogflow.com/api-client/assets/img/logo-short.png" v-else />
-        
+        <span style="font-size: 30px; color: white">HEYHEYHEY</span>
         <!-- Agent Title -->
-        <h1 class="app-title">{{(config.i18n[sel_lang] && config.i18n[sel_lang].welcomeTitle) || config.i18n[config.app.fallback_lang].welcomeTitle}} {{app.displayName}}</h1>
+        <h1 class="app-title">Heyheyheyyyyy</h1>
 
         <!-- Agent Description -->
         <p class="app-description">{{app.description}}</p>
-        
-        <!-- Language picker, when your Agent supports more than one Language -->
-        <div v-if="app.supportedLanguageCodes && app.supportedLanguageCodes.length > 0">
-            <span @click="sel_lang = app.defaultLanguageCode" class="language-picker" :class="{'picked': sel_lang == app.defaultLanguageCode}">
-                {{ app.defaultLanguageCode | toLang }}
-            </span>
 
-            <span @click="sel_lang = language" class="language-picker" v-for="language in app.supportedLanguageCodes" :class="{'picked': sel_lang == language}">
-                {{ language | toLang }}
-            </span>
-        </div>
     </div>
 </template>
 
@@ -43,7 +30,7 @@
 
 .app-description
     font-size: 16px
-    color: #5F6368
+    color: #FFFFFF
 
 .language-picker
     display: inline-block

@@ -31,6 +31,7 @@
         width: 100%
         animation: 1.5s ease infinite
 
+
 .flexible
     display: flex
 
@@ -60,7 +61,7 @@
     color: white !important
 
 .input
-    font-size: 16px
+    font-size: 1em
     font-weight: 500
     width: 100%
     box-sizing: border-box
@@ -70,6 +71,11 @@
     padding-left: 8px
     padding-right: 8px
     color: #FFFFFF
+
+    @media screen and (max-width: 1000px)
+        font-size: 2em
+
+
 
 .input::placeholder
     color: #98999a
