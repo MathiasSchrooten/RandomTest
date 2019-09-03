@@ -15,7 +15,9 @@
     padding: 15px
 
     @media screen and (max-width: 1000px)
-        font-size: 1.7em
+        //font-size: 1.7em
+        font-size: 1em
+
 
 .suggestion[href]
     background-color: #565758

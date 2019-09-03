@@ -82,10 +82,12 @@ body
     height: 100%
     font-family: Roboto, sans-serif
     font-display: swap
-    background-color: #1C1D1F
+    /*background-color: #1C1D1F*/
+    background-color: transparent
 
 #app
-    background-color: rgba(0, 0, 0, .6)
+    /*background-color: rgba(0, 0, 0, .6)*/
+    background-color: transparent
     backdrop-filter: blur(10px)
     display: flex
     flex-direction: column

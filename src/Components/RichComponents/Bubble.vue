@@ -49,7 +49,7 @@
 
 
     @media screen and (max-width: 1000px)
-        font-size: 2em
+        font-size: 1em
 
 
     &::before
