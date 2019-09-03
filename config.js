@@ -12,7 +12,7 @@ export default {
     app: {
         gateway: get_gateway_url(), // <- enter your gateway URL here, the function is just a helper function for my cloud integration. You don't normally need it
         muted: false, // <- mute microphone at start
-        start_suggestions: [], // <- array of suggestions, displayed at the start screen
+        start_suggestions: ["I want to increase my digital return on investment", "I want to join the team!", "I want to have a 🥃 with you guys!", "I am working on a project"], // <- array of suggestions, displayed at the start screen
         fallback_lang: 'en' // <- fallback language code, if history mode or network is unavailable
     },
     i18n: {

@@ -69,7 +69,7 @@
         float: left
         background-color: #323334
         @media screen and (max-width: 1000px)
-            margin-top: 60px
+            //margin-top: 60px
 
     &.me
         border-radius: 30px 0px 30px 30px
@@ -79,7 +79,7 @@
         right: 3rem
 
         @media (min-width: 1300px)
-            position: absolute
+            //position: absolute
             //right: 8%
 
 
@@ -87,12 +87,13 @@
         border: 0px solid #F1F3F4
         color: black
         margin-top: -30px
-        margin-right: 20px
+        margin-right: 40px
         margin-bottom: 20px
+
 
         @media screen and (max-width: 1000px)
             right: 6%
-            margin-top: -50px
+            //margin-top: -50px
 
     &.loading
         width: 20px

@@ -8,13 +8,22 @@
                     <section style="height: 20%" class="container chat-container">
 
                         <!-- Welcome component is for onboarding experience and language picker -->
-                        <Welcome v-if="messages.length === 0" :app="app"></Welcome>
+<!--                        <Welcome v-if="messages.length === 0" :app="app"></Welcome>-->
                         <!-- Messages Table -->
-                        <div id="tContainer" ref="mContainer" class="messages" v-else>
+                        <div id="tContainer" ref="mContainer" class="messages">
+                            <table class="message">
+                                <tr>
+                                    <td>
+                                        <Bubble from="bot" :text="hey" :mp3url="false" :image-url="false" :video-url="false" :pdf-url="false"></Bubble>
+                                    </td>
+                                </tr>
+                            </table>
                             <table  v-for="m in messages" class="message">
                                 <tr>
                                     <!-- My message -->
-                                    <td><Bubble :text="m.queryResult.queryText"  from="me" /></td>
+                                    <td>
+                                        <Bubble :text="m.queryResult.queryText"   from="me" />
+                                    </td>
                                 </tr>
 
                                 <!-- Component iterator (Dialogflow Gateway Feature) -->
@@ -56,9 +65,7 @@
                                 </tr>
                             </table>
                         </div>
-
                     </section>
-
                 </div>
 
 <!--                <div class="bottomchatx">-->
@@ -99,6 +106,8 @@ body
     margin-right: auto
     padding: 16px
     position: relative
+
+
 
 @font-face
     font-family: 'Material Icons'
@@ -196,7 +205,7 @@ export default {
             imageUrl: false,
             pdfUrl: false,
             videoUrl: false,
-            hey: 'hey'
+            hey: 'Welcome to Wisemen! How may we help you today?'
         };
     },
     created(){
@@ -234,9 +243,7 @@ export default {
                 }
 
                 return suggestions
-            }
-            
-            else {
+            } else {
                 return {
                     text_suggestions: this.config.app.start_suggestions // <- if no messages are present, return start_suggestions, from config.js to help user figure out what he can do with your application
                 }

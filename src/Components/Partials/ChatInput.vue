@@ -2,35 +2,46 @@
         <div class="bottomchat">
             <div class="container">
                 <!-- Here are the suggestions -->
-                <div class="suggestions">
-<!--                    <div class="leftright" v-if="suggestions.length !== 0" @click="showLeftSuggestions()">-->
-<!--                        <input class="leftright" type="image" src="https://wisemenchatbot.s3-eu-west-1.amazonaws.com/left.png"/>-->
-<!--                    </div>-->
-                    <Suggestion v-if="suggestions.text_suggestions" v-for="(suggestion, index) in suggestions.text_suggestions" :key="index" @click.native="$emit('submit', suggestion)" :title="suggestion" />
-                    <Suggestion v-if="suggestions.link_suggestion" :title="suggestions.link_suggestion.destinationName" :url="suggestions.link_suggestion.uri" />
-<!--                    <div class="leftright" @click="showRightSuggestions()">-->
-<!--                        <input class="leftright" type="image" src="https://wisemenchatbot.s3-eu-west-1.amazonaws.com/right.png" />-->
-<!--                    </div>-->
+                <div class="supercontainer">
+<!--                    <div style="width: 20px; height: 20px; margin-bottom: -40px; background-color: red;"></div>-->
+
+                    <div class="suggContainer">
+                        <div class="suggestions">
+                            <Suggestion v-if="suggestions.text_suggestions" v-for="(suggestion, index) in suggestions.text_suggestions" :key="index" @click.native="$emit('submit', suggestion)" :title="suggestion" />
+                            <Suggestion v-if="suggestions.link_suggestion" :title="suggestions.link_suggestion.destinationName" :url="suggestions.link_suggestion.uri" />
+                        </div>
+                    </div>
+<!--                    <div style="margin-right: 50px;width: 20px; height: 20px; background-color: yellow; "></div>-->
                 </div>
 
                 <div class="flexible">
                     <!-- Text input -->
                     <div class="input-container">
                         <input :aria-label="(config.i18n[lang()] && config.i18n[lang()].inputTitle) || config.i18n[config.app.fallback_lang].inputTitle" class="input" type="text" :placeholder="(config.i18n[lang()] && config.i18n[lang()].inputTitle) || config.i18n[config.app.fallback_lang].inputTitle" v-model="query" @keypress.enter="submit()" />
-
                     </div>
                 </div>
             </div>
         </div>
-
-
 </template>
 
 <style lang="sass" scoped>
-
 .leftright
     max-height: 100px
     max-width: 100px
+
+.suggContainer
+    margin-left: 30px
+    margin-right: 30px
+    white-space: nowrap
+    overflow-x: auto
+    /*display: inline-block*/
+
+
+
+
+.supercontainer
+    /*white-space: nowrap*/
+
 .bottomchat
     position: fixed
     bottom: 0
@@ -49,6 +60,7 @@
     white-space: nowrap
     -webkit-overflow-scrolling: auto
     max-height: 100px
+    display: inline-block
 
     &::-webkit-scrollbar
         display: none
