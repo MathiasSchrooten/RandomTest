@@ -1,10 +1,12 @@
 import '@babel/polyfill' // <- babel Polyfills
 import 'whatwg-fetch' // <- Fetch API Polyfill
 
-import Vue from 'vue'
+import Vue from 'vue-router'
 import App from './Components/App/App.vue'
 
+
 import config from './../config'
+import VueRouter from ''
 import worker from './registerServiceWorker' // <- register service worker, disable it, when running in development mode
 
 Vue.prototype.config = config;// <- set config to global scope
