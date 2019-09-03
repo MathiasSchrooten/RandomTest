@@ -18,7 +18,6 @@
         //font-size: 1.7em
         font-size: 1em
 
-
 .suggestion[href]
     background-color: #565758
     box-shadow: 0 3px 6px 2px rgba(66,133,244,0.15)

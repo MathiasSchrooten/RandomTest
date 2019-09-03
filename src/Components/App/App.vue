@@ -262,7 +262,7 @@ export default {
             this.loading = true;
 
             // Make the request to gateway with formatting enabled */
-            fetch('https://scvirtualagent.chatwise.be/getBotResponse', {method: 'POST', mode: 'cors', headers: {'content-type': 'application/json'}, body: JSON.stringify(request)})
+            fetch('https://7148e642.ngrok.io/getBotResponse', {method: 'POST', mode: 'cors', headers: {'content-type': 'application/json'}, body: JSON.stringify(request)})
             .then(response => {
                 return response.json();
             })

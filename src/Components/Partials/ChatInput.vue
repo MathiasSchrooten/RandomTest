@@ -82,9 +82,7 @@
     color: #FFFFFF
 
     @media screen and (max-width: 1000px)
-        font-size: 2em
-
-
+        font-size: 1em
 
 .input::placeholder
     color: #98999a
