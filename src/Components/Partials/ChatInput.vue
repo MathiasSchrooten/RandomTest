@@ -3,16 +3,21 @@
             <div class="container">
                 <!-- Here are the suggestions -->
                 <div class="suggestions">
+<!--                    <div class="leftright" v-if="suggestions.length !== 0" @click="showLeftSuggestions()">-->
+<!--                        <input class="leftright" type="image" src="https://wisemenchatbot.s3-eu-west-1.amazonaws.com/left.png"/>-->
+<!--                    </div>-->
                     <Suggestion v-if="suggestions.text_suggestions" v-for="(suggestion, index) in suggestions.text_suggestions" :key="index" @click.native="$emit('submit', suggestion)" :title="suggestion" />
                     <Suggestion v-if="suggestions.link_suggestion" :title="suggestions.link_suggestion.destinationName" :url="suggestions.link_suggestion.uri" />
+<!--                    <div class="leftright" @click="showRightSuggestions()">-->
+<!--                        <input class="leftright" type="image" src="https://wisemenchatbot.s3-eu-west-1.amazonaws.com/right.png" />-->
+<!--                    </div>-->
                 </div>
+
                 <div class="flexible">
                     <!-- Text input -->
                     <div class="input-container">
                         <input :aria-label="(config.i18n[lang()] && config.i18n[lang()].inputTitle) || config.i18n[config.app.fallback_lang].inputTitle" class="input" type="text" :placeholder="(config.i18n[lang()] && config.i18n[lang()].inputTitle) || config.i18n[config.app.fallback_lang].inputTitle" v-model="query" @keypress.enter="submit()" />
-                        <div @click="submit()">
-                            <input type="image" src="https://wisemenchatbot.s3-eu-west-1.amazonaws.com/submit+button.svg" />
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -22,24 +27,28 @@
 </template>
 
 <style lang="sass" scoped>
+
+.leftright
+    max-height: 100px
+    max-width: 100px
 .bottomchat
     position: fixed
     bottom: 0
-    width: 50%
+    width: 100%
     background-color: var(--background)
     @media screen and (max-width: 1000px)
         width: 100%
         animation: 1.5s ease infinite
-
 
 .flexible
     display: flex
 
 .suggestions
     overflow-x: scroll
-    overflow-y: hidden
+    overflow-y: scroll
     white-space: nowrap
-    -webkit-overflow-scrolling: touch
+    -webkit-overflow-scrolling: auto
+    max-height: 100px
 
     &::-webkit-scrollbar
         display: none
@@ -118,9 +127,15 @@ export default {
             recognition: null
         }
     },
+    showLeftSuggestions() {
+        console.log("[LEFT] showing more suggestions...")
+    },
+    showRightSuggestions() {
+        console.log("[RIGHT] showing more suggestions...")
+    },
     created(){
         if(window.webkitSpeechRecognition || window.SpeechRecognition){
-            this.recognition = new webkitSpeechRecognition() || new SpeechRecognition()
+            this.recognition = new webkitSpeechRecognition() || new SpeechRecognition();
             this.recognition.interimResults = true
             this.recognition.lang = this.lang()
         }

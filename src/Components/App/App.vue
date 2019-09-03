@@ -250,9 +250,11 @@ export default {
     },
     methods: {
         send(q){
+            //TODO: add userId to getBotResponse
             let request = {
                 "text": q,
-                "languageCode": this.lang()
+                "languageCode": this.lang(),
+                //"userId": userId
             }; // <- this is how a Dialogflow request look like
 
             this.loading = true;

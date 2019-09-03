@@ -71,17 +71,12 @@
         @media screen and (max-width: 1000px)
             margin-top: 60px
 
-
-
-
     &.me
         border-radius: 30px 0px 30px 30px
         background-color: #FFD301
         padding: 1rem
         position: absolute
         right: 3rem
-
-
 
         @media (min-width: 1300px)
             position: absolute

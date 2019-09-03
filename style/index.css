@@ -4,6 +4,10 @@
     background-position: center;
 }
 
+.bottom {
+    margin-top:20px;
+}
+
 .flex-container {
     display: flex;
     height: 100vh;
@@ -21,8 +25,6 @@
     .flex-55 {
         width: 100%;
     }
-
-
 
     .flex-50 {
         width: 0;
