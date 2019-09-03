@@ -263,10 +263,13 @@ export default {
             let request = {
                 "text": q,
                 "languageCode": this.lang(),
+                "userId": window.location.pathname
                 //"userId": userId
             }; // <- this is how a Dialogflow request look like
 
             this.loading = true;
+            console.log("route = ");
+            console.log(window.location.pathname);
 
             // Make the request to gateway with formatting enabled */
             fetch('https://7148e642.ngrok.io/getBotResponse', {method: 'POST', mode: 'cors', headers: {'content-type': 'application/json'}, body: JSON.stringify(request)})
