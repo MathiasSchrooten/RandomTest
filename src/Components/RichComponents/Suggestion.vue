@@ -1,5 +1,6 @@
 <template>
-    <a target="_blank" rel="noopener noreferrer" :href="url" class="suggestion">{{title}}</a>
+    <a v-if="url !== ''" target="_blank" rel="noopener noreferrer" :href="url" class="suggestion">{{title}}</a>
+    <a v-else target="_blank" rel="noopener noreferrer" class="suggestion" @click.native="$emit('emitting', title) ">{{title}}</a>
 </template>
 <style lang="sass" scoped>
 
@@ -13,6 +14,7 @@
     margin-bottom: 15px
     font-size: 1em
     padding: 15px
+    cursor: pointer
 
     @media screen and (max-width: 1000px)
         //font-size: 1.7em
@@ -28,6 +30,21 @@
 <script>
 export default {
     name: 'Suggestion',
-    props: ['title', 'url']
+    props: ['title', 'url'],
+    watch: {
+        // title () {
+        //     console.log("title incoming bitches...");
+        //     console.log(this.title());
+        // },
+        // url () {
+        //
+        // }
+    },
+    methods: {
+        emitting(title) {
+            console.log("emitting....");
+            console.log(title);
+        }
+    }
 }
 </script>

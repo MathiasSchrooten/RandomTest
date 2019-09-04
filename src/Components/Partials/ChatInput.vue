@@ -7,8 +7,9 @@
 
                     <div class="suggContainer">
                         <div class="suggestions">
-                            <Suggestion v-if="suggestions.text_suggestions" v-for="(suggestion, index) in suggestions.text_suggestions" :key="index" @click.native="$emit('submit', suggestion)" :title="suggestion" />
-                            <Suggestion v-if="suggestions.link_suggestion" :title="suggestions.link_suggestion.destinationName" :url="suggestions.link_suggestion.uri" />
+<!--                            <Suggestion v-if="suggestions.text_suggestions" v-for="(suggestion, index) in suggestions.text_suggestions" :key="index" @click.native="$emit('submit', suggestion)" :title="suggestion" />-->
+<!--                            <Suggestion v-if="suggestions.link_suggestion" :title="suggestions.link_suggestion.title" :url="suggestions.link_suggestion.url" />-->
+                                <Suggestion v-if="suggestions.multi_suggestions" v-for="(suggestion, index) in suggestions.multi_suggestions" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
                         </div>
                     </div>
 <!--                    <div style="margin-right: 50px;width: 20px; height: 20px; background-color: yellow; "></div>-->
@@ -23,6 +24,31 @@
             </div>
         </div>
 </template>
+
+<!--<template>-->
+<!--    <div class="bottomchat">-->
+<!--        <div class="container">-->
+<!--            &lt;!&ndash; Here are the suggestions &ndash;&gt;-->
+<!--            <div class="suggestions"><slot></slot></div>-->
+<!--            <div class="flexible">-->
+<!--                &lt;!&ndash; Text input &ndash;&gt;-->
+<!--                <div class="input-container">-->
+<!--                    <input :aria-label="(config.i18n[lang()] && config.i18n[lang()].inputTitle) || config.i18n[config.app.fallback_lang].inputTitle" class="input" type="text" :placeholder="(config.i18n[lang()] && config.i18n[lang()].inputTitle) || config.i18n[config.app.fallback_lang].inputTitle" v-model="query" @keypress.enter="submit()" />-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Send message button (arrow button) &ndash;&gt;-->
+<!--                <div :aria-label="(config.i18n[lang()] && config.i18n[lang()].sendTitle) || config.i18n[config.app.fallback_lang].sendTitle" :title="(config.i18n[lang()] && config.i18n[lang()].sendTitle) || config.i18n[config.app.fallback_lang].sendTitle" class="button-container" v-if="!micro && query.length > 0" @click="submit()">-->
+<!--                    <i class="material-icons" aria-hidden="true">arrow_upward</i>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Microphone Button &ndash;&gt;-->
+<!--                <div :aria-label="(config.i18n[lang()] && config.i18n[lang()].microphoneTitle) || config.i18n[config.app.fallback_lang].microphoneTitle" :title="(config.i18n[lang()] && config.i18n[lang()].microphoneTitle) || config.i18n[config.app.fallback_lang].microphoneTitle" class="button-container mic_button" :class="{'mic_active': micro}" @click="micro = !micro" v-else>-->
+<!--                    <i class="material-icons" aria-hidden="true">mic</i>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</template>-->
 
 <style lang="sass" scoped>
 .leftright
@@ -146,8 +172,8 @@ export default {
     created(){
         if(window.webkitSpeechRecognition || window.SpeechRecognition){
             this.recognition = new webkitSpeechRecognition() || new SpeechRecognition();
-            this.recognition.interimResults = true
-            this.recognition.lang = this.lang()
+            this.recognition.interimResults = true;
+            this.recognition.lang = this.lang();
         }
     },
     watch: {
@@ -177,9 +203,13 @@ export default {
     methods: {
         submit(){
             if(this.query.length > 0){
-                this.$emit('submit', this.query)
-                this.query = ''
+                this.$emit('submit', this.query);
+                this.query = '';
             }
+        },
+        emitting(title) {
+            console.log("emitting....");
+            console.log(title);
         }
     }
 }

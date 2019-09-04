@@ -65,7 +65,7 @@
         border-radius: 0px 30px 30px 30px
         padding: 1rem
         margin-bottom: 60px
-        margin-top: 20px
+        margin-top: 30px
         float: left
         background-color: #323334
         @media screen and (max-width: 1000px)

@@ -2,14 +2,10 @@
     <div style="height: 100%;">
         <div style="display: flex;justify-content: flex-end; width: 100%; height: 100%;">
             <main id="app" >
-<!--                background-color: #1C1D1F; opacity: 0.9; box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5); filter: blur(10px);-->
                 <div style=" width: 100%; overflow-y: scroll">
                     <TopHead v-if="app && messages.length > 0" :app="app"></TopHead>
                     <section style="height: 20%" class="container chat-container">
 
-                        <!-- Welcome component is for onboarding experience and language picker -->
-<!--                        <Welcome v-if="messages.length === 0" :app="app"></Welcome>-->
-                        <!-- Messages Table -->
                         <div id="tContainer" ref="mContainer" class="messages">
                             <table class="message">
                                 <tr>
@@ -108,7 +104,6 @@ body
     position: relative
 
 
-
 @font-face
     font-family: 'Material Icons'
     font-style: normal
@@ -135,6 +130,7 @@ body
 <style lang="sass" scoped>
 .chat-container
     padding-top: 60px
+    margin-top: -60px
     padding-bottom: 1px
     min-height: 80vh
     max-height: 80vh
@@ -238,8 +234,14 @@ export default {
                 let suggestions = [];
 
                 for (let component in last_message){
-                    if (last_message[component].name === 'SUGGESTIONS') suggestions.text_suggestions = last_message[component].content
-                    if (last_message[component].name === 'LINK_OUT_SUGGESTION') suggestions.link_suggestion = last_message[component].content
+                    if (last_message[component].name === 'SUGGESTIONS') suggestions.text_suggestions = last_message[component].content;
+                    if (last_message[component].name === 'LINK_OUT_SUGGESTION') suggestions.link_suggestion = last_message[component].content;
+                    if (last_message[component].name === 'multi_suggestions') {
+                        console.log("multisuggestions incoming:");
+                        console.log(last_message[component]);
+                        suggestions.multi_suggestions = last_message[component].content;
+                    }
+                    //console.log(last_message[component]);
                 }
 
                 return suggestions
@@ -268,18 +270,15 @@ export default {
             }; // <- this is how a Dialogflow request look like
 
             this.loading = true;
-            console.log("route = ");
-            console.log(window.location.pathname);
 
             // Make the request to gateway with formatting enabled */
-            fetch('https://7148e642.ngrok.io/getBotResponse', {method: 'POST', mode: 'cors', headers: {'content-type': 'application/json'}, body: JSON.stringify(request)})
+            fetch('https://7f771a36.ngrok.io/getBotResponse', {method: 'POST', mode: 'cors', headers: {'content-type': 'application/json'}, body: JSON.stringify(request)})
             .then(response => {
                 return response.json();
             })
             .then(response => {
                 this.messages.push(response);
                 this.loading = false
-
             });
 
             this.$nextTick(() => {
