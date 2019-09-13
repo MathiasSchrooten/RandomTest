@@ -47,4 +47,8 @@
     .left-container {
         display: none;
     }
+
+    .app {
+        display: none;
+    }
 }

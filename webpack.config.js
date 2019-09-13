@@ -1,8 +1,9 @@
-const { VueLoaderPlugin } = require('vue-loader')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const path = require('path')
+const { VueLoaderPlugin } = require('vue-loader');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 
-const env = process.env.NODE_ENV
+const env = process.env.NODE_ENV;
 
 module.exports = {
     entry: path.join(__dirname, 'src', 'main.js'),
@@ -36,6 +37,9 @@ module.exports = {
         noInfo: true
     },
     plugins: [
-        new VueLoaderPlugin()
-    ]
-}
+        new VueLoaderPlugin(),
+        new CopyPlugin([
+            { from: './index.html', to: 'dist' }
+        ]),
+    ],
+};

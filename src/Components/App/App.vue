@@ -1,10 +1,10 @@
 <template>
-    <div style="height: 100%;">
+    <div >
         <div style="display: flex;justify-content: flex-end; width: 100%; height: 100%;">
             <main id="app" >
                 <div style=" width: 100%; overflow-y: scroll">
                     <TopHead v-if="app && messages.length > 0" :app="app"></TopHead>
-                    <section style="height: 20%" class="container chat-container">
+                    <section class="container chat-container">
 
                         <div id="tContainer" ref="mContainer" class="messages">
                             <table class="message">
@@ -65,7 +65,7 @@
                 </div>
 
 <!--                <div class="bottomchatx">-->
-                    <ChatInput class="bottomchat" @submit="send" :suggestions="suggestions"></ChatInput>
+                    <ChatInput class="bottomchat" :input-allowed="inputAllowed"  @submit="send" :suggestions="suggestions"></ChatInput>
 <!--                </div>-->
 
             </main>
@@ -102,7 +102,7 @@ body
     margin-right: auto
     padding: 16px
     position: relative
-
+    height: 100%
 
 @font-face
     font-family: 'Material Icons'
@@ -135,9 +135,9 @@ body
     min-height: 80vh
     max-height: 80vh
 
-
 .message
     width: 100%
+    height: 100%
     display: inline-block
 
 .audio-toggle
@@ -201,30 +201,11 @@ export default {
             imageUrl: false,
             pdfUrl: false,
             videoUrl: false,
-            hey: 'Welcome to Wisemen! How may we help you today?'
+            inputAllowed: false,
+            hey: 'Welcome visitor, what brings you to the Wisemen household today?'
         };
     },
     created(){
-        /* If history is enabled, the messages are retrieved from localStorage */
-        //TODO: comment for dev, uncomment following lines for prod
-        // if(this.history() && localStorage.getItem('message_history') !== null){
-        //     this.messages = JSON.parse(localStorage.getItem('message_history'))
-        // }
-        //
-        // /* Session should be persistent (in case of page reload, the context should stay) */
-        // if(this.history() && localStorage.getItem('session') !== null){
-        //     this.session = localStorage.getItem('session')
-        // }
-        //
-        // else {
-        //     this.session = uuidv1();
-        //     if(this.history()) localStorage.setItem('session', this.session)
-        // }
-        //
-        // /* Cache Agent (this will save bandwith) */
-        // if(this.history() && localStorage.getItem('agent') !== null){
-        //     this.app = JSON.parse(localStorage.getItem('agent'))
-        // }
     },
     computed: {
         /* The code below is used to extract suggestions from last message, to display it on ChatInput */
@@ -241,13 +222,11 @@ export default {
                         console.log(last_message[component]);
                         suggestions.multi_suggestions = last_message[component].content;
                     }
-                    //console.log(last_message[component]);
                 }
-
                 return suggestions
             } else {
                 return {
-                    text_suggestions: this.config.app.start_suggestions // <- if no messages are present, return start_suggestions, from config.js to help user figure out what he can do with your application
+                    multi_suggestions: this.config.app.start_suggestions // <- if no messages are present, return start_suggestions, from config.js to help user figure out what he can do with your application
                 }
             }
         }
@@ -272,19 +251,27 @@ export default {
             this.loading = true;
 
             // Make the request to gateway with formatting enabled */
-            fetch('https://b4de71d1.ngrok.io/getBotResponse', {method: 'POST', mode: 'cors', headers: {'content-type': 'application/json'}, body: JSON.stringify(request)})
+            fetch('https://scvirtualagent.chatwise.be/getBotResponse', {method: 'POST', mode: 'cors', headers: {'content-type': 'application/json'}, body: JSON.stringify(request)})
             .then(response => {
+
                 return response.json();
             })
             .then(response => {
+                console.log("inputAllowed = " + response.inputAllowed);
+                this.inputAllowed = response.inputAllowed;
+                console.log(response);
                 this.messages.push(response);
                 this.loading = false
+
             });
 
             this.$nextTick(() => {
                 let element = document.getElementById('bottom');
-                element.scrollIntoView(true);
+                setTimeout(() => element.scrollIntoView({block: 'start', behavior: 'smooth'}), 1000);
             })
+        },
+        timeOut() {
+
         }
     }
 }

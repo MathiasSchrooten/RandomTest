@@ -16,9 +16,9 @@
     padding: 15px
     cursor: pointer
 
-    @media screen and (max-width: 1000px)
-        //font-size: 1.7em
-        font-size: 1em
+    @media screen and (max-width: 700px)
+        font-size: 0.57em
+        /*font-size: 1em*/
 
 .suggestion[href]
     background-color: #565758
@@ -32,13 +32,6 @@ export default {
     name: 'Suggestion',
     props: ['title', 'url'],
     watch: {
-        // title () {
-        //     console.log("title incoming bitches...");
-        //     console.log(this.title());
-        // },
-        // url () {
-        //
-        // }
     },
     methods: {
         emitting(title) {

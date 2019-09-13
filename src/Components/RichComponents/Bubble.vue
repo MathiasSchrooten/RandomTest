@@ -38,7 +38,7 @@
 <style lang="sass" scoped>
 
 .textInBubble
-    font-size: 30px
+    //font-size: 30px
 
 .bubble
     color: white
@@ -46,10 +46,14 @@
     position: relative
     max-width: 60%
     font-size: 1em
+    /*@media screen and (min-width: 1px)*/
+    /*    font-size: 2em*/
+    //
+    /*@media screen and (min-width: 650px)*/
+    /*    font-size: 1em*/
 
-
-    @media screen and (max-width: 1000px)
-        font-size: 1em
+    /*@media only screen and (min-width: 651px)*/
+    /*    font-size: 1em*/
 
 
     &::before
@@ -57,7 +61,8 @@
         position: absolute
         left: 0
         top: 0
-        margin-top: -9px
+        margin-top: -5px
+
         margin-left: -1px
 
 
@@ -65,11 +70,11 @@
         border-radius: 0px 30px 30px 30px
         padding: 1rem
         margin-bottom: 60px
-        margin-top: 30px
+        margin-top: 10px
         float: left
         background-color: #323334
-        @media screen and (max-width: 1000px)
-            //margin-top: 60px
+        @media screen and (max-width: 650px)
+            margin-top: 60px
 
     &.me
         border-radius: 30px 0px 30px 30px
@@ -86,9 +91,9 @@
         //background-color: rgba(#FFFFFF, .4)
         border: 0px solid #F1F3F4
         color: black
-        margin-top: -30px
+        margin-top: -60px
         margin-right: 40px
-        margin-bottom: 20px
+        margin-bottom: 30px
 
 
         @media screen and (max-width: 1000px)
@@ -112,7 +117,7 @@
     height: 50px
     width: 50px
     float: right
-    margin-top: -35px
+    margin-top: -60px
     padding-top: 3px
     position: absolute
     right: 2%
