@@ -5,20 +5,20 @@
 <style lang="sass" scoped>
 
 .suggestion
+    //display: inline-block
     display: inline-block
     background-color: #565758
     border-radius: 40px
     color: white
     cursor: pointer
+    max-width: 100%
     margin-right: 5px
-    margin-bottom: 15px
-    font-size: 1em
-    padding: 15px
-    cursor: pointer
+    margin-bottom: 5px
+    font-size: 0.85em
+    padding: 8px
 
     @media screen and (max-width: 700px)
-        font-size: 0.57em
-        /*font-size: 1em*/
+        font-size: 0.7em
 
 .suggestion[href]
     background-color: #565758

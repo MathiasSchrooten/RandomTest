@@ -5,14 +5,73 @@
                 <div class="supercontainer">
 <!--                    <div style="width: 20px; height: 20px; margin-bottom: -40px; background-color: red;"></div>-->
 
-                    <div class="suggContainer">
-                        <div class="suggestions">
-                                <Suggestion v-if="suggestions.multi_suggestions" v-for="(suggestion, index) in suggestions.multi_suggestions" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                    <div v-if="suggestions !== undefined && suggestions.length === 1">
+                        <div class="suggContainer">
+                            <div class="suggestions">
+                                <!--                                v-if="suggestions[0].multi_suggestions"-->
+                                <Suggestion  v-for="(suggestion, index) in suggestions[0]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="suggestions !== undefined && suggestions.length === 2">
+                        <div class="suggContainer">
+                            <div class="suggestions">
+<!--                                v-if="suggestions[0].multi_suggestions"-->
+                                <Suggestion  v-for="(suggestion, index) in suggestions[0]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                            </div>
+                        </div>
+                        <div class="suggContainer">
+                            <div class="suggestions">
+<!--                                v-if="suggestions[1].multi_suggestions"-->
+                                <Suggestion v-for="(suggestion, index) in suggestions[1]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="suggestions !== undefined && suggestions.length ===3">
+                        <div class="suggContainer">
+                            <div class="suggestions">
+                                <Suggestion  v-for="(suggestion, index) in suggestions[0]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                            </div>
+                        </div>
+                        <div class="suggContainer">
+                            <div class="suggestions">
+                                <Suggestion v-for="(suggestion, index) in suggestions[1]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                            </div>
+                        </div>
+                        <div class="suggContainer">
+                            <div class="suggestions">
+                                <Suggestion v-for="(suggestion, index) in suggestions[2]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="suggestions !== undefined && suggestions.length ===4">
+                        <div class="suggContainer">
+                            <div class="suggestions">
+                                <Suggestion  v-for="(suggestion, index) in suggestions[0]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                            </div>
+                        </div>
+                        <div class="suggContainer">
+                            <div class="suggestions">
+                                <Suggestion v-for="(suggestion, index) in suggestions[1]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                            </div>
+                        </div>
+                        <div class="suggContainer">
+                            <div class="suggestions">
+                                <Suggestion v-for="(suggestion, index) in suggestions[2]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                            </div>
+                        </div>
+                        <div class="suggContainer">
+                            <div class="suggestions">
+                                <Suggestion v-for="(suggestion, index) in suggestions[3]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                            </div>
                         </div>
                     </div>
                 </div>
-            <div v-if="inputAllowed === true" class="flexible">
-<!--                <div class="flexible">-->
+
+            <div v-if="inputAllowed === true" class="">
 
                 <!-- Text input -->
                     <div class="input-container">
@@ -29,12 +88,11 @@
     max-width: 100px
 
 .suggContainer
-    margin-left: 30px
-    margin-right: 30px
+    margin-left: 2px
+    margin-right: 2px
     white-space: nowrap
     overflow-x: auto
     /*display: inline-block*/
-
 
 .supercontainer
     /*white-space: nowrap*/
@@ -42,6 +100,7 @@
 .bottomchat
     position: fixed
     bottom: 0
+    max-height: 100%
     width: 100%
     background-color: var(--background)
     @media screen and (max-width: 1000px)
@@ -49,16 +108,11 @@
         animation: 1.5s ease infinite
 
 .flexible
-    display: flex
+    display: none
 
 .suggestions
-    overflow-x: scroll
-    overflow-y: scroll
-    white-space: nowrap
-    -webkit-overflow-scrolling: auto
+    float: right
     max-height: 100px
-    display: inline-block
-
     &::-webkit-scrollbar
         display: none
 

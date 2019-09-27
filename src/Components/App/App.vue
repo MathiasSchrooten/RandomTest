@@ -1,8 +1,8 @@
 <template>
     <div >
-        <div style="display: flex;justify-content: flex-end; width: 100%; height: 100%;">
+        <div style="display: flex;justify-content: flex-end; width: 100%; height: 80%;">
             <main id="app" >
-                <div style=" width: 100%; overflow-y: scroll">
+                <div style="width: 100%; height: 100%; overflow-y: scroll">
                     <TopHead v-if="app && messages.length > 0" :app="app"></TopHead>
                     <section class="container chat-container">
 
@@ -18,7 +18,7 @@
                                 <tr>
                                     <!-- My message -->
                                     <td>
-                                        <Bubble :text="m.queryResult.queryText"   from="me" />
+                                        <Bubble v-if="m.queryResult.queryText !== ''" :text="m.queryResult.queryText"   from="me" />
                                     </td>
                                 </tr>
 
@@ -85,13 +85,11 @@ body
     height: 100%
     font-family: Roboto, sans-serif
     font-display: swap
-    /*background-color: #1C1D1F*/
     background-color: transparent
 
 #app
     /*background-color: rgba(0, 0, 0, .6)*/
     background-color: transparent
-    backdrop-filter: blur(10px)
     display: flex
     flex-direction: column
     width: 100%
@@ -102,8 +100,7 @@ body
     margin-right: auto
     padding: 16px
     position: relative
-    height: 100%
-
+    max-height: 100%
 @font-face
     font-family: 'Material Icons'
     font-style: normal
@@ -223,11 +220,215 @@ export default {
                         suggestions.multi_suggestions = last_message[component].content;
                     }
                 }
-                return suggestions
-            } else {
-                return {
-                    multi_suggestions: this.config.app.start_suggestions // <- if no messages are present, return start_suggestions, from config.js to help user figure out what he can do with your application
+
+                if (suggestions.multi_suggestions !== undefined) {
+                    let suggestionsArray = [];
+                    let suggestionsArray1 = [];
+                    let suggestionsArray2 = [];
+                    let suggestionsArray3 = [];
+                    let suggestionsArray4 = [];
+
+                    if (suggestions.multi_suggestions[0].title === 'Yes') {
+                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        return suggestionsArray;
+                    }
+
+                    if (suggestions.multi_suggestions[0].title === 'Design 🎨') {
+                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
+                        suggestionsArray3.push(suggestions.multi_suggestions[2]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+                        return suggestionsArray;
+                    }
+
+                    if (suggestions.multi_suggestions[0].title === 'I want to increase my digital return on investment 💻') {
+                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
+                        suggestionsArray3.push(suggestions.multi_suggestions[2]);
+                        suggestionsArray4.push(suggestions.multi_suggestions[3]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+                        suggestionsArray.push(suggestionsArray4);
+
+                        return suggestionsArray;
+                    }
+
+                    if (suggestions.multi_suggestions[0].title === 'The origin story') {
+                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
+                        suggestionsArray3.push(suggestions.multi_suggestions[2]);
+                        suggestionsArray4.push(suggestions.multi_suggestions[3]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+                        suggestionsArray.push(suggestionsArray4);
+                        return suggestionsArray;
+                    }
+
+                    if (suggestions.multi_suggestions[0].title === 'I have an idea 💡') {
+                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
+                        suggestionsArray3.push(suggestions.multi_suggestions[2]);
+                        suggestionsArray4.push(suggestions.multi_suggestions[3]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+                        suggestionsArray.push(suggestionsArray4);
+
+                        return suggestionsArray;
+                    }
+
+                    //
+
+                    //How we handle things
+                    if (suggestions.multi_suggestions[0].title === 'How we handle things') {
+                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
+                        suggestionsArray3.push(suggestions.multi_suggestions[2]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+                        return suggestionsArray;
+                    }
+
+                    if (suggestions.multi_suggestions[0].title === 'Ideation') {
+                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                        suggestionsArray1.push(suggestions.multi_suggestions[1]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[2]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[3]);
+                        suggestionsArray3.push(suggestions.multi_suggestions[4]);
+                        suggestionsArray3.push(suggestions.multi_suggestions[5]);
+                        suggestionsArray4.push(suggestions.multi_suggestions[6]);
+                        suggestionsArray4.push(suggestions.multi_suggestions[7]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+                        suggestionsArray.push(suggestionsArray4);
+                        return suggestionsArray;
+                    }
+
+                    if (suggestions.multi_suggestions[0].title === 'Go to Market') {
+                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                        suggestionsArray1.push(suggestions.multi_suggestions[1]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[2]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[3]);
+                        suggestionsArray3.push(suggestions.multi_suggestions[4]);
+                        suggestionsArray3.push(suggestions.multi_suggestions[5]);
+                        suggestionsArray4.push(suggestions.multi_suggestions[6]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+                        suggestionsArray.push(suggestionsArray4);
+                        return suggestionsArray;
+                    }
+
+                    if (suggestions.multi_suggestions[0].title === '🍺') {
+                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                        suggestionsArray1.push(suggestions.multi_suggestions[1]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[2]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[3]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[4]);
+                        suggestionsArray3.push(suggestions.multi_suggestions[5]);
+                        suggestionsArray3.push(suggestions.multi_suggestions[6]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+
+                        return suggestionsArray;
+                    }
+
+
+                    console.log(suggestions.multi_suggestions[0]);
+                    if (suggestions.multi_suggestions.length < 3) {
+                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                        if (suggestions.multi_suggestions.length === 2) {
+                            suggestionsArray1.push(suggestions.multi_suggestions[1]);
+                        }
+                        suggestionsArray.push(suggestionsArray1);
+                    }
+
+                    if (suggestions.multi_suggestions.length > 2 && suggestions.multi_suggestions.length <= 4) {
+                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                        suggestionsArray1.push(suggestions.multi_suggestions[1]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[2]);
+                        if (suggestions.multi_suggestions.length === 4) {
+                            suggestionsArray2.push(suggestions.multi_suggestions[3]);
+                        }
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                    } else {
+                        if (suggestions.multi_suggestions.length > 4 && suggestions.multi_suggestions.length <= 6) {
+                            suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                            suggestionsArray1.push(suggestions.multi_suggestions[1]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[2]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[3]);
+                            suggestionsArray3.push(suggestions.multi_suggestions[4]);
+                            if (suggestions.multi_suggestions.length === 6) {
+                                suggestionsArray3.push(suggestions.multi_suggestions[5]);
+                            }
+                            suggestionsArray.push(suggestionsArray1);
+                            suggestionsArray.push(suggestionsArray2);
+                            suggestionsArray.push(suggestionsArray3);
+                        } else {
+                            if (suggestions.multi_suggestions.length > 6 && suggestions.multi_suggestions.length <= 8) {
+                                suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                                suggestionsArray1.push(suggestions.multi_suggestions[1]);
+                                suggestionsArray2.push(suggestions.multi_suggestions[2]);
+                                suggestionsArray2.push(suggestions.multi_suggestions[3]);
+                                suggestionsArray3.push(suggestions.multi_suggestions[4]);
+                                suggestionsArray3.push(suggestions.multi_suggestions[5]);
+                                suggestionsArray4.push(suggestions.multi_suggestions[6]);
+
+                                if (suggestions.multi_suggestions.length === 8) {
+                                    suggestionsArray4.push(suggestions.multi_suggestions[7]);
+                                }
+                                suggestionsArray.push(suggestionsArray1);
+                                suggestionsArray.push(suggestionsArray2);
+                                suggestionsArray.push(suggestionsArray3);
+                                suggestionsArray.push(suggestionsArray4);
+                            }
+                        }
+                    }
+
+                    return suggestionsArray;
                 }
+
+
+            } else {
+                let suggestionsArray = [];
+                let suggestionsArray1 = [];
+                let suggestionsArray2 = [];
+                let suggestionsArray3 = [];
+                let suggestionsArray4 = [];
+
+                let suggestions = this.config.app.start_suggestions;
+
+                suggestionsArray1.push(suggestions[0]);
+                suggestionsArray2.push(suggestions[1]);
+                suggestionsArray3.push(suggestions[2]);
+                suggestionsArray4.push(suggestions[3]);
+                suggestionsArray.push(suggestionsArray1);
+                suggestionsArray.push(suggestionsArray2);
+                suggestionsArray.push(suggestionsArray3);
+                suggestionsArray.push(suggestionsArray4);
+
+                console.log(suggestionsArray);
+                return suggestionsArray;
             }
         }
     },
@@ -253,13 +454,12 @@ export default {
             // Make the request to gateway with formatting enabled */
             fetch('https://scvirtualagent.chatwise.be/getBotResponse', {method: 'POST', mode: 'cors', headers: {'content-type': 'application/json'}, body: JSON.stringify(request)})
             .then(response => {
-
                 return response.json();
             })
             .then(response => {
                 console.log("inputAllowed = " + response.inputAllowed);
                 this.inputAllowed = response.inputAllowed;
-                console.log(response);
+
                 this.messages.push(response);
                 this.loading = false
 
@@ -267,7 +467,7 @@ export default {
 
             this.$nextTick(() => {
                 let element = document.getElementById('bottom');
-                setTimeout(() => element.scrollIntoView({block: 'start', behavior: 'smooth'}), 1000);
+                setTimeout(() => element.scrollIntoView({block: 'start', behavior: 'smooth'}), 1250);
             })
         },
         timeOut() {
