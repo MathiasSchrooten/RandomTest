@@ -46,6 +46,7 @@
     position: relative
     max-width: 55%
     font-size: 0.85em
+    //this is dev shit bruh
 
     @media screen and (max-width: 650px)
         max-width: 55%
