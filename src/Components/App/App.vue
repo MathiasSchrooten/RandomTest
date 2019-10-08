@@ -6,7 +6,7 @@
                     <TopHead v-if="app && messages.length > 0" :app="app"></TopHead>
                     <section class="container chat-container">
 
-                        <div id="tContainer" ref="mContainer" class="messages">
+                        <div id="tContainer" ref="mContainer" class="">
                             <table class="message">
                                 <tr>
                                     <td>
@@ -17,15 +17,12 @@
                             <table  v-for="m in messages" class="message">
                                 <tr>
                                     <!-- My message -->
-                                    <td>
-                                        <Bubble v-if="m.queryResult.queryText !== ''" :text="m.queryResult.queryText"   from="me" />
-                                    </td>
+                                    <Bubble v-if="m.queryResult.queryText !== ''" :text="m.queryResult.queryText"   from="me" />
+
                                 </tr>
 
                                 <!-- Component iterator (Dialogflow Gateway Feature) -->
-                                <tr v-for="component in m.queryResult.fulfillmentMessages">
-
-                                    <td>
+                                <tr class="component" v-for="component in m.queryResult.fulfillmentMessages">
 
                                         <Bubble from="bot" :text="component.content" :mp3url="component.mp3url" :imageUrl="component.imageUrl" :videoUrl="component.videoUrl" :pdfUrl="component.pdfUrl"  v-if="component.name === 'multi'" />
 
@@ -46,27 +43,25 @@
 
                                         <!-- Webhook Image -->
                                         <Picture v-if="component.name == 'IMAGE'" :image="component.content" />
-                                    </td>
+
                                 </tr>
                             </table>
                             <div id="bottom"></div>
                             <table class="message" v-if="loading">
                                 <tr>
                                     <!-- My message (Loading) -->
-                                    <td><Bubble from="me" loading="false" /></td>
+                                    <Bubble from="me" v-if="loading === true" :text="meText" />
                                 </tr>
-                                <tr>
-                                    <!-- Default / Webhook bubble (Loading) -->
-                                    <td><Bubble loading="true" /></td>
+                                <tr v-if="loading === true">
+                                    <Bubble from="bot" :text="loadingText" :isLoading="true" :mp3url="false" :image-url="false" :video-url="false" pdf-url=""/>
+
                                 </tr>
                             </table>
                         </div>
                     </section>
                 </div>
 
-<!--                <div class="bottomchatx">-->
-                    <ChatInput class="bottomchat" :input-allowed="inputAllowed"  @submit="send" :suggestions="suggestions"></ChatInput>
-<!--                </div>-->
+                    <ChatInput ref="chatInput" v-if="suggestionsVisible === true" class="bottomchat" :input-allowed="inputAllowed"  @submit="send" :suggestions="suggestions"></ChatInput>
 
             </main>
 
@@ -126,16 +121,23 @@ body
 
 <style lang="sass" scoped>
 .chat-container
-    padding-top: 60px
-    margin-top: -60px
-    padding-bottom: 1px
-    min-height: 80vh
-    max-height: 80vh
+    padding-top: 45px
+    //margin-top: -40px
+    //padding-bottom: 1px
+    min-height: 70vh
+    max-height: 70vh
+
+        //margin-top: -50px
 
 .message
     width: 100%
     height: 100%
-    display: inline-block
+    table-layout: fixed
+
+    .component
+        padding-bottom: 10px
+        width: 100%
+        margin-bottom: 10px
 
 .audio-toggle
     position: fixed
@@ -159,10 +161,7 @@ body
     padding-bottom: 20px
     padding-left: 10px
 </style>
-
 <script>
-
-
 
 import Welcome from './../Welcome/Welcome.vue'
 import TopHead from './../Partials/TopHead.vue'
@@ -174,10 +173,12 @@ import List from './../RichComponents/List.vue'
 import Picture from './../RichComponents/Picture.vue'
 
 import * as uuidv1 from 'uuid/v1'
+import TypingMessage from "../Partials/typingMessage.vue";
 
 export default {
     name: 'app',
     components: {
+        TypingMessage,
         Welcome,
         TopHead,
         ChatInput,
@@ -199,7 +200,11 @@ export default {
             pdfUrl: false,
             videoUrl: false,
             inputAllowed: false,
-            hey: 'Welcome visitor, what brings you to the Wisemen household today?'
+            suggestionsVisible: true,
+            hey: 'Welcome visitor, what brings you to the Wisemen household today?',
+            loadingText: 'LOADINGTEXT',
+            meText: '',
+            lastRequestedMessage: '',
         };
     },
     created(){
@@ -215,20 +220,37 @@ export default {
                     if (last_message[component].name === 'SUGGESTIONS') suggestions.text_suggestions = last_message[component].content;
                     if (last_message[component].name === 'LINK_OUT_SUGGESTION') suggestions.link_suggestion = last_message[component].content;
                     if (last_message[component].name === 'multi_suggestions') {
-                        console.log("multisuggestions incoming:");
-                        console.log(last_message[component]);
                         suggestions.multi_suggestions = last_message[component].content;
                     }
                 }
 
                 if (suggestions.multi_suggestions !== undefined) {
+                    this.suggestionsVisible = true;
                     let suggestionsArray = [];
                     let suggestionsArray1 = [];
                     let suggestionsArray2 = [];
                     let suggestionsArray3 = [];
                     let suggestionsArray4 = [];
 
+                    if (suggestions.multi_suggestions[0].title === 'Read more') {
+                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        return suggestionsArray;
+                    }
+
                     if (suggestions.multi_suggestions[0].title === 'Yes') {
+                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        return suggestionsArray;
+                    }
+
+                    if (suggestions.multi_suggestions[0].title === 'Iterative Development') {
                         suggestionsArray1.push(suggestions.multi_suggestions[0]);
                         suggestionsArray2.push(suggestions.multi_suggestions[1]);
 
@@ -241,18 +263,21 @@ export default {
                         suggestionsArray1.push(suggestions.multi_suggestions[0]);
                         suggestionsArray2.push(suggestions.multi_suggestions[1]);
                         suggestionsArray3.push(suggestions.multi_suggestions[2]);
+                        suggestionsArray4.push(suggestions.multi_suggestions[3]);
 
                         suggestionsArray.push(suggestionsArray1);
                         suggestionsArray.push(suggestionsArray2);
                         suggestionsArray.push(suggestionsArray3);
+                        suggestionsArray.push(suggestionsArray4);
                         return suggestionsArray;
                     }
 
                     if (suggestions.multi_suggestions[0].title === 'I want to increase my digital return on investment 💻') {
                         suggestionsArray1.push(suggestions.multi_suggestions[0]);
                         suggestionsArray2.push(suggestions.multi_suggestions[1]);
+                        suggestionsArray2.push(suggestions.multi_suggestions[3]);
                         suggestionsArray3.push(suggestions.multi_suggestions[2]);
-                        suggestionsArray4.push(suggestions.multi_suggestions[3]);
+
 
                         suggestionsArray.push(suggestionsArray1);
                         suggestionsArray.push(suggestionsArray2);
@@ -266,12 +291,12 @@ export default {
                         suggestionsArray1.push(suggestions.multi_suggestions[0]);
                         suggestionsArray2.push(suggestions.multi_suggestions[1]);
                         suggestionsArray3.push(suggestions.multi_suggestions[2]);
-                        suggestionsArray4.push(suggestions.multi_suggestions[3]);
+                       // suggestionsArray4.push(suggestions.multi_suggestions[3]);
 
                         suggestionsArray.push(suggestionsArray1);
                         suggestionsArray.push(suggestionsArray2);
                         suggestionsArray.push(suggestionsArray3);
-                        suggestionsArray.push(suggestionsArray4);
+                        //suggestionsArray.push(suggestionsArray4);
                         return suggestionsArray;
                     }
 
@@ -408,26 +433,23 @@ export default {
                     return suggestionsArray;
                 }
 
-
             } else {
                 let suggestionsArray = [];
                 let suggestionsArray1 = [];
                 let suggestionsArray2 = [];
                 let suggestionsArray3 = [];
-                let suggestionsArray4 = [];
 
                 let suggestions = this.config.app.start_suggestions;
 
                 suggestionsArray1.push(suggestions[0]);
                 suggestionsArray2.push(suggestions[1]);
+                suggestionsArray2.push(suggestions[3]);
                 suggestionsArray3.push(suggestions[2]);
-                suggestionsArray4.push(suggestions[3]);
+
                 suggestionsArray.push(suggestionsArray1);
                 suggestionsArray.push(suggestionsArray2);
                 suggestionsArray.push(suggestionsArray3);
-                suggestionsArray.push(suggestionsArray4);
 
-                console.log(suggestionsArray);
                 return suggestionsArray;
             }
         }
@@ -440,39 +462,126 @@ export default {
 
     },
     methods: {
-        send(q){
-            //TODO: add userId to getBotResponse
-            let request = {
-                "text": q,
-                "languageCode": this.lang(),
-                "userId": window.location.pathname
-                //"userId": userId
-            }; // <- this is how a Dialogflow request look like
+        async send(q){
+            if (this.lastRequestedMessage !== q || q === 'Read more') {
+                //TODO: add userId to getBotResponse
 
-            this.loading = true;
+                let request = {
+                    "text": q,
+                    "languageCode": this.lang(),
+                    "userId": window.location.pathname
+                    //"userId": userId
+                }; // <- this is how a Dialogflow request look like
+                this.lastRequestedMessage = q;
 
-            // Make the request to gateway with formatting enabled */
-            fetch('https://scvirtualagent.chatwise.be/getBotResponse', {method: 'POST', mode: 'cors', headers: {'content-type': 'application/json'}, body: JSON.stringify(request)})
-            .then(response => {
-                return response.json();
-            })
-            .then(response => {
-                console.log("inputAllowed = " + response.inputAllowed);
-                this.inputAllowed = response.inputAllowed;
+                this.loadingText = '';
 
-                this.messages.push(response);
-                this.loading = false
-
-            });
-
-            this.$nextTick(() => {
                 let element = document.getElementById('bottom');
-                setTimeout(() => element.scrollIntoView({block: 'start', behavior: 'smooth'}), 1250);
-            })
+                setTimeout(() => element.scrollIntoView({block: 'start', behavior: 'smooth'}), 1);
+
+
+                this.meText = q;
+                this.loading = true;
+
+                await sleep(750);
+
+                this.suggestionsVisible = false;
+                // Make the request to gateway with formatting enabled */
+                fetch('https://affadae4.ngrok.io/getBotResponse', {method: 'POST', mode: 'cors', headers: {'content-type': 'application/json'}, body: JSON.stringify(request)})
+                    .then(response => {
+                        return response.json();
+                    })
+                    .then(async response => {
+                        this.inputAllowed = response.inputAllowed;
+
+                        if (this.hasMultipleAnswers(response)) {
+
+                            for (let x = 0; x < response.queryResult.fulfillmentMessages.length; x++) {
+                                console.log("x = " + x);
+                                if (x !== 0) {
+                                    response.queryResult.queryText = "";
+                                }
+
+                                let newResponse = "";
+                                console.log("response " + x.toString());
+                                console.log(response.queryResult.fulfillmentMessages);
+
+                                let name = await response.queryResult.fulfillmentMessages[x].name;
+                                console.log("name = " + name);
+
+                                if (name === 'DEFAULT' || name === 'multi') {
+                                    console.log("FOUND A DEFAULT!");
+                                    newResponse = await response;
+                                    console.log("new response = ");
+                                    console.log(newResponse);
+                                    newResponse.queryResult.fulfillmentMessages = [];
+                                    newResponse.queryResult.fulfillmentMessages[0] = response.queryResult.fulfillmentMessages[x];
+                                    this.messages.push(newResponse);
+                                    //await sleep(500);
+                                } else {
+                                    console.log("found ====<<>>>> " + name);
+                                    newResponse = await response;
+                                    newResponse.queryResult.fulfillmentMessages = [];
+                                    newResponse.queryResult.fulfillmentMessages[0] = response.queryResult.fulfillmentMessages[x];
+                                    this.messages.push(newResponse);
+                                }
+
+                                newResponse = ""
+                            }
+
+                            //this.messages.push(response);
+                            this.loading = false
+                        } else {
+                            this.messages.push(response);
+                            this.loading = false
+                        }
+                    });
+
+                this.$nextTick(() => {
+                    window.scrollTo(0, 1);
+                    window.scrollTo(0, 0);
+                    let element = document.getElementById('bottom');
+                    //element.scrollIntoView({block: 'start', behavior: 'smooth'});
+                    this.suggestionsVisible = true;
+
+                    setTimeout(function() {
+                        element.scrollIntoView({block: 'start', behavior: 'smooth'});
+                        this.suggestionsVisible = true;
+                    }.bind(this), 1000);
+                    if (this.inputAllowed) {
+                        this.$refs.chatInput.focusNow();
+                    }
+                })
+            }
+
         },
         timeOut() {
 
+        },
+
+        removeMyMessage(response) {
+            console.log("removeMyMessage...");
+            console.log(response);
+            print("response.queryResult.queryText ... => " + response.queryResult.queryText);
+            response.queryResult.queryText = "";
+            return response
+           // response.queryResult.
+        },
+
+        hasMultipleAnswers(response) {
+            console.log("has multiple answers? ");
+            console.log(response);
+            let fulfillment = response.queryResult.fulfillmentMessages;
+
+            console.log(fulfillment.length);
+            return fulfillment.length > 2
         }
     }
+
+
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 </script>

@@ -5,9 +5,15 @@
 
         <span class="bubble" :class="{'me': from === 'me', 'loading': loading}">
 
-        <img style="margin-top: 10px; margin-left: 15px; width: 100%; max-width: 200px;" v-if="imageUrl != false && from =='bot'" v-bind:src="imageUrl" alt="">
+        <img style="margin-top: 5px; margin-left: 5px; width: 100%; max-width: 200px;" v-if="imageUrl != false && from =='bot'" v-bind:src="imageUrl" alt="">
         <br v-if="imageUrl != false && from == 'bot'">
         <br v-if="imageUrl != false && from == 'bot'">
+
+        <span v-if="videoUrl != false && from =='bot'">
+           <video controls="false" loop autoplay muted playsinline v-bind:src="videoUrl" ref="videoRef" id="video-container" class="video"></video>
+            <br/>
+        </span>
+
         <template class="textInBubble" v-for="line in text">{{line}}</template>
 
         <button name="playButton" v-if="from == 'bot' && mp3url != false" class="btn btn-primary btn-sm" @click.prevent="audio.isPlaying ? pause(audio) : play(audio)" v-for="audio in audios" :key="audio.id"><span class="fa fa-play-circle-o"></span>
@@ -16,16 +22,20 @@
             <!--<audio id="audio" src=""></audio>-->
         </button>
 
-
         <span v-if="pdfUrl != false && from =='bot'">
             <br>
             <a v-bind:href="pdfUrl" target="_blank">Open PDF</a>
         </span>
         <span v-if="videoUrl != false && from =='bot'">
             <br>
-           <video v-bind:src="videoUrl" id="video-container" style="width:100%;max-width: 300px;" controls></video>
-            <br>
+
+<!--                    <video controls="true" loop autoplay @ended="onEnd()" v-bind:src="videoUrl" ref="videoRef" id="video-container" class="video"></video>-->
+   <br>
         </span>
+
+            <div v-if="isLoading===true">
+                <TypingMessage/>
+            </div>
 
     </span>
         <!--user-image next to user response-->
@@ -37,68 +47,87 @@
 
 <style lang="sass" scoped>
 
+.video
+    //margin-top: 10px
+    margin: 5px
+    width: 100%
+    max-width: 300px
+    height: 100%
+    max-height: 100%
+
 .textInBubble
     //font-size: 30px
 
 .bubble
     color: white
-    display: inline-block
+    display: block
     position: relative
-    max-width: 55%
+    //max-width: 55%
     font-size: 0.85em
-    //this is dev shit bruh
+    padding: 12px
+    border-radius: 40px
+    border: 1px solid var(--border)
+    background-color: var(--background)
+    min-width: 26px
+    max-width: 75%
 
-    @media screen and (max-width: 650px)
-        max-width: 55%
-        font-size: 0.7em
+    /*@media screen and (max-width: 650px)*/
+    /*    max-width: 55%*/
+    /*    font-size: 0.7em*/
 
 
     &::before
-        /*content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyOHB4IiB2aWV3Qm94PSIwIDAgMjQgMjgiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8ZyBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMjQuMDAwMDAwLCAtMTAxLjAwMDAwMCkiPgogICAgICAgICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNC4wMDAwMDAsIDEwMS4wMDAwMDApIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0wLjUsMS4yMTMzNzE0OCBDMC41LDcuNjA2NjkwNjcgMC41LDguNzU1Nzk0NzggMC41LDI2LjkzMjQ3OTIgTDIyLjU4NjkzMDIsOC41MjY3MDQwNCBDMTMuMDQwODkxNSw4LjU4NTgzODUzIDUuNjY5NjIyMDQsNi4xNTI1ODA2MyAwLjUsMS4yMTMzNzE0OCBaIiBzdHJva2U9IiNFOEVBRUQiPjwvcGF0aD4KICAgICAgICAgICAgICAgIDxwb2x5Z29uIGZpbGw9IiNGRkZGRkYiIGZpbGwtcnVsZT0ibm9uemVybyIgcG9pbnRzPSIxIDkgMjQgOSAxIDI4Ij48L3BvbHlnb24+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==")*/
         position: absolute
         left: 0
         top: 0
-        margin-top: -10px
+        margin-top: -9px
         margin-left: -1px
 
-
     &:not(.me)
-        border-radius: 0 30px 30px 30px
+        float: left
+        border-radius: 0px 30px 30px 30px
+        background-color: #323334
+        margin-bottom: 15px
+
+    /*&:not(.me)*/
+    /*    background-color: #323334*/
+    /*    float: left*/
+
+    /* border-radius: 0 30px 30px 30px
         padding: 1rem
         margin-bottom: 30px
         margin-top: 2px
         float: left
         background-color: #323334
         margin-left: -2px
-        @media screen and (max-width: 650px)
-            margin-top: 20px
-            margin-bottom: 45px
+        /*@media screen and (max-width: 650px)*/
+        /*    margin-top: 20px*/
+        /*    margin-bottom: 45px*/
 
     &.me
+        float: right
         border-radius: 30px 0px 30px 30px
-        background-color: #FFD301
-        padding: 1rem
         border: 0px solid #F1F3F4
+        background-color: #FFD301
+        font-size: 0.85em
         color: black
-        margin-top: -45px
+        margin-top: 2px
         margin-right: 20px
-        margin-bottom: 30px
-        position: absolute
-        right: 3rem
-
-        @media screen and (max-width: 650px)
-            margin-top: -50px
-
-        @media (min-width: 1300px)
-            //position: absolute
-            //right: 8%
+        margin-bottom: 15px
 
 
 
+        &::before
+            content: ''
+
+        &::after
+            position: absolute
+            margin-top: -9px
+            margin-right: -1px
 
 
         @media screen and (max-width: 1000px)
-            right: 6%
+            right: 1%
             //margin-top: -50px
 
     &.loading
@@ -118,12 +147,13 @@
     height: 25px
     width: 25px
     float: right
-    margin-top: -45px
+    margin-top: 0
     padding-top: 3px
     position: absolute
-    right: 3%
+    right: 1%
+
     @media screen and (max-width: 650px)
-        margin-top: -50px
+        margin-top: 0px
         margin-bottom: 30px
 
 .image-wisemen
@@ -131,21 +161,23 @@
     padding-top: 0px
 
     margin-right: 10px
-    margin-top: 2px
+    margin-top: 5px
     width: 25px
     height: 25px
     border-radius: 15px
 
     @media screen and (max-width: 650px)
-        margin-top: 10px
+        margin-top: 1px
         margin-bottom: 30px
 
 </style>
 
 <script>
+import TypingMessage from "../Partials/typingMessage.vue";
 export default {
     name: 'Bubble',
-    props: ['text', 'from', 'loading', 'mp3url', 'imageUrl', 'pdfUrl', 'videoUrl', 'componentName'],
+    components: {TypingMessage},
+    props: ['text', 'from', 'loading', 'isLoading', 'mp3url', 'imageUrl', 'pdfUrl', 'videoUrl', 'componentName'],
     data: function() {
         return {
             hey: 'hey',
@@ -165,6 +197,14 @@ export default {
             ]
         }
     },
+
+    mounted: function() {
+        if (this.$refs.videoRef) {
+            console.log(this.$refs.videoRef.src);
+            this.$refs.videoRef.play();
+        }
+
+    },
     methods: {
         play(audio) {
             audio.isPlaying = true;
@@ -173,7 +213,12 @@ export default {
         pause (audio) {
             audio.isPlaying = false;
             audio.file.pause();
+        },
+        onEnd: function() {
+            this.$refs.videoRef.play();
         }
      }
 }
 </script>
+
+

@@ -1,14 +1,10 @@
 <template>
         <div class="bottomchat">
             <div class="container">
-                <!-- Here are the suggestions -->
-                <div class="supercontainer">
-<!--                    <div style="width: 20px; height: 20px; margin-bottom: -40px; background-color: red;"></div>-->
-
+                <div class="supercontainer" v-if="!hasClicked">
                     <div v-if="suggestions !== undefined && suggestions.length === 1">
                         <div class="suggContainer">
                             <div class="suggestions">
-                                <!--                                v-if="suggestions[0].multi_suggestions"-->
                                 <Suggestion  v-for="(suggestion, index) in suggestions[0]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
                             </div>
                         </div>
@@ -17,34 +13,55 @@
                     <div v-if="suggestions !== undefined && suggestions.length === 2">
                         <div class="suggContainer">
                             <div class="suggestions">
-<!--                                v-if="suggestions[0].multi_suggestions"-->
                                 <Suggestion  v-for="(suggestion, index) in suggestions[0]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
                             </div>
                         </div>
                         <div class="suggContainer">
                             <div class="suggestions">
-<!--                                v-if="suggestions[1].multi_suggestions"-->
                                 <Suggestion v-for="(suggestion, index) in suggestions[1]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
                             </div>
                         </div>
                     </div>
 
                     <div v-if="suggestions !== undefined && suggestions.length ===3">
-                        <div class="suggContainer">
-                            <div class="suggestions">
-                                <Suggestion  v-for="(suggestion, index) in suggestions[0]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                        <div v-if="suggestions[0][0].title === '🍺'">
+<!--                            increase font of emoticons-->
+                            <div class="suggContainer">
+                                <div class="suggestions">
+                                    <Suggestion emoticon="true"  v-for="(suggestion, index) in suggestions[0]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                                </div>
+                            </div>
+                            <div class="suggContainer">
+                                <div class="suggestions">
+                                    <Suggestion emoticon="true" v-for="(suggestion, index) in suggestions[1]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                                </div>
+                            </div>
+                            <div class="suggContainer">
+                                <div class="suggestions">
+                                    <Suggestion emoticon="true" v-for="(suggestion, index) in suggestions[2]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                                </div>
                             </div>
                         </div>
-                        <div class="suggContainer">
-                            <div class="suggestions">
-                                <Suggestion v-for="(suggestion, index) in suggestions[1]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                        <div v-else>
+<!--                            show suggestions normally = >-->
+                            <div class="suggContainer">
+                                <div class="suggestions">
+                                    <Suggestion  v-for="(suggestion, index) in suggestions[0]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                                </div>
+                            </div>
+                            <div class="suggContainer">
+                                <div class="suggestions">
+                                    <Suggestion v-for="(suggestion, index) in suggestions[1]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                                </div>
+                            </div>
+                            <div class="suggContainer">
+                                <div class="suggestions">
+                                    <Suggestion v-for="(suggestion, index) in suggestions[2]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
+                                </div>
                             </div>
                         </div>
-                        <div class="suggContainer">
-                            <div class="suggestions">
-                                <Suggestion v-for="(suggestion, index) in suggestions[2]" :key="index" @click.native="$emit('submit', suggestion.title)" :title="suggestion.title"  :url="suggestion.url" />
-                            </div>
-                        </div>
+
+
                     </div>
 
                     <div v-if="suggestions !== undefined && suggestions.length ===4">
@@ -75,7 +92,7 @@
 
                 <!-- Text input -->
                     <div class="input-container">
-                        <input  :aria-label="(config.i18n[lang()] && config.i18n[lang()].inputTitle) || config.i18n[config.app.fallback_lang].inputTitle" class="input" type="text" :placeholder="(config.i18n[lang()] && config.i18n[lang()].inputTitle) || config.i18n[config.app.fallback_lang].inputTitle" v-model="query" @keypress.enter="submit()" />
+                        <input ref="inputTextField" autofocus :aria-label="(config.i18n[lang()] && config.i18n[lang()].inputTitle) || config.i18n[config.app.fallback_lang].inputTitle" class="input" type="text" :placeholder="(config.i18n[lang()] && config.i18n[lang()].inputTitle) || config.i18n[config.app.fallback_lang].inputTitle" v-model="query" @keypress.enter="submit()" />
                     </div>
                 </div>
             </div>
@@ -185,8 +202,12 @@ export default {
         return {
             query: '',
             micro: false,
-            recognition: null
+            recognition: null,
+            hasClicked: false
         }
+    },
+    focusNow() {
+        this.$refs.inputTextField.focus();
     },
     created(){
         if(window.webkitSpeechRecognition || window.SpeechRecognition){
@@ -223,6 +244,9 @@ export default {
         submit(){
             if(this.query.length > 0){
                 this.$emit('submit', this.query);
+                this.hasClicked = true;
+                this.suggestions = "";
+                this.multi_suggestions = "";
                 this.query = '';
                 //this.suggestions = "";
             }
@@ -230,8 +254,8 @@ export default {
         emitting(title) {
             console.log("emitting....");
             console.log(title);
-            this.suggestions = null;
-            this.multi_suggestions = null;
+            this.suggestions = "";
+            this.multi_suggestions = "";
         }
     }
 }

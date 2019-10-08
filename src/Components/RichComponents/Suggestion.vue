@@ -1,6 +1,6 @@
 <template>
-    <a v-if="url !== ''" target="_blank" rel="noopener noreferrer" :href="url" class="suggestion">{{title}}</a>
-    <a v-else target="_blank" rel="noopener noreferrer" class="suggestion" @click.native="$emit('emitting', title) ">{{title}}</a>
+    <a v-if="url !== ''" target="_blank" rel="noopener noreferrer" :href="url" v-bind:class="{'suggestionEmoticon': emoticon, 'suggestion': !emoticon}"> {{title}}</a>
+    <a v-else target="_blank" rel="noopener noreferrer" v-bind:class="{'suggestionEmoticon': emoticon, 'suggestion': !emoticon}" @click.native="$emit('emitting', title) ">{{title}}</a>
 </template>
 <style lang="sass" scoped>
 
@@ -14,11 +14,28 @@
     max-width: 100%
     margin-right: 5px
     margin-bottom: 5px
-    font-size: 0.85em
-    padding: 8px
+    font-size: 0.75em
+    padding: 6px
 
     @media screen and (max-width: 700px)
-        font-size: 0.7em
+        font-size: 0.75em
+
+.suggestionEmoticon
+    //display: inline-block
+    display: inline-block
+    background-color: #565758
+    border-radius: 40px
+    color: white
+    cursor: pointer
+    max-width: 100%
+    margin-right: 5px
+    margin-bottom: 5px
+    font-size: 1em
+    padding: 6px
+
+    @media screen and (max-width: 700px)
+        font-size: 1em
+
 
 .suggestion[href]
     background-color: #565758
@@ -30,13 +47,18 @@
 <script>
 export default {
     name: 'Suggestion',
-    props: ['title', 'url'],
+    props: ['title', 'url', 'emoticon'],
     watch: {
     },
     methods: {
         emitting(title) {
             console.log("emitting....");
             console.log(title);
+        },
+        getClass() {
+            return {
+
+            }
         }
     }
 }
