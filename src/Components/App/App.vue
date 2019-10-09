@@ -487,7 +487,7 @@ export default {
 
                 this.suggestionsVisible = false;
                 // Make the request to gateway with formatting enabled */
-                fetch('https://affadae4.ngrok.io/getBotResponse', {method: 'POST', mode: 'cors', headers: {'content-type': 'application/json'}, body: JSON.stringify(request)})
+                fetch('https://scvirtualagent.chatwise.be/getBotResponse', {method: 'POST', mode: 'cors', headers: {'content-type': 'application/json'}, body: JSON.stringify(request)})
                     .then(response => {
                         return response.json();
                     })
@@ -496,40 +496,65 @@ export default {
 
                         if (this.hasMultipleAnswers(response)) {
 
+                            let idsTextResponse = [];
+                            let textResponsesArray = [];
+                            let responsesToAdd = [];
+                            let actualResponses = [];
+                            let nActualResponses = [];
+                            let idsNTextResponse = [];
+                            let responsesToImmediatelyAdd = [];
+
                             for (let x = 0; x < response.queryResult.fulfillmentMessages.length; x++) {
-                                console.log("x = " + x);
-                                if (x !== 0) {
-                                    response.queryResult.queryText = "";
+                                //console.log("x = " + x);
+                                if (x !== 0 && ( x !== (response.queryResult.fulfillmentMessages.length - 1))) {
+                                    //response.queryResult.queryText = "";
                                 }
 
                                 let newResponse = "";
-                                console.log("response " + x.toString());
-                                console.log(response.queryResult.fulfillmentMessages);
+                                let backupResponses = response;
 
-                                let name = await response.queryResult.fulfillmentMessages[x].name;
-                                console.log("name = " + name);
+
+                                let name = response.queryResult.fulfillmentMessages[x].name;
+                                let content = response.queryResult.fulfillmentMessages[x].content;
 
                                 if (name === 'DEFAULT' || name === 'multi') {
-                                    console.log("FOUND A DEFAULT!");
-                                    newResponse = await response;
-                                    console.log("new response = ");
-                                    console.log(newResponse);
-                                    newResponse.queryResult.fulfillmentMessages = [];
-                                    newResponse.queryResult.fulfillmentMessages[0] = response.queryResult.fulfillmentMessages[x];
-                                    this.messages.push(newResponse);
-                                    //await sleep(500);
+                                    idsTextResponse.push(x);
+                                    textResponsesArray.push(content);
                                 } else {
-                                    console.log("found ====<<>>>> " + name);
-                                    newResponse = await response;
-                                    newResponse.queryResult.fulfillmentMessages = [];
-                                    newResponse.queryResult.fulfillmentMessages[0] = response.queryResult.fulfillmentMessages[x];
-                                    this.messages.push(newResponse);
+                                    idsNTextResponse.push(x);
+                                    nActualResponses.push(content);
                                 }
 
-                                newResponse = ""
                             }
 
-                            //this.messages.push(response);
+                            for (let y = idsTextResponse.length - 1; y >= 0; y--) {
+                                responsesToAdd.push(response.queryResult.fulfillmentMessages[idsTextResponse[y]]);
+                                response.queryResult.fulfillmentMessages.splice([idsTextResponse[y]]);
+                                 //console.log("goingToImmediatelyAdd: ");
+                                 //console.log(response.queryResult.fulfillmentMessages)
+                            }
+
+                            for (let w = idsNTextResponse.length -1; w >= 0; w--) {
+                                responsesToImmediatelyAdd.push(response.queryResult.fulfillmentMessages[idsNTextResponse[w]]);
+                            }
+
+                            console.log("RESPONSES to immediately add...");
+                            console.log(responsesToImmediatelyAdd);
+
+                            for (let z = 0; z < responsesToAdd.length; z++) {
+
+                                this.loading = true;
+                                await sleep(1000);
+                                response.queryResult.fulfillmentMessages.push(responsesToAdd[z]);
+
+                                let actualResponse = this.generateActualResponses(response, responsesToAdd[z]);
+                                actualResponses.push(actualResponse);
+                                this.messages.push(actualResponses[z]);
+
+                                this.loading = false;
+                            }
+
+
                             this.loading = false
                         } else {
                             this.messages.push(response);
@@ -559,13 +584,25 @@ export default {
 
         },
 
+        generateActualResponses(response, message) {
+            console.log("generatingActualResponses...");
+            console.log(message);
+
+            let newResponse;
+
+            response.queryResult.fulfillmentMessages = [];
+            response.queryResult.fulfillmentMessages.push(message);
+
+            Object.assign(response, newResponse);
+
+            return response;
+        },
         removeMyMessage(response) {
             console.log("removeMyMessage...");
             console.log(response);
-            print("response.queryResult.queryText ... => " + response.queryResult.queryText);
+            console.log("response.queryResult.queryText ... => " + response.queryResult.queryText);
             response.queryResult.queryText = "";
             return response
-           // response.queryResult.
         },
 
         hasMultipleAnswers(response) {
