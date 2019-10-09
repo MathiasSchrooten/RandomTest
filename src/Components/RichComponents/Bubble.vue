@@ -23,7 +23,7 @@
         </span>
         <span v-if="videoUrl != false && from =='bot'">
             <br>
-           <video v-bind:src="videoUrl" id="video-container" style="width:100%;max-width: 300px;" controls></video>
+           <video v-bind:src="videoUrl" id="video-container" class="video" controls></video>
             <br>
         </span>
 
@@ -39,6 +39,13 @@
 
 .textInBubble
     //font-size: 30px
+
+.video
+    margin: 15px
+    width: 100%
+    height: 100%
+    max-width: 300px
+    max-height: 100%
 
 .bubble
     color: white

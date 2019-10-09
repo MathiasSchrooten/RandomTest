@@ -261,13 +261,16 @@ export default {
                 this.inputAllowed = response.inputAllowed;
                 console.log(response);
                 this.messages.push(response);
-                this.loading = false
+                this.loading = false;
+
+                let element = document.getElementById('bottom');
+                setTimeout(() => element.scrollIntoView({block: 'start', behavior: 'smooth'}), 200);
 
             });
 
             this.$nextTick(() => {
-                let element = document.getElementById('bottom');
-                setTimeout(() => element.scrollIntoView({block: 'start', behavior: 'smooth'}), 1000);
+                //let element = document.getElementById('bottom');
+                //setTimeout(() => element.scrollIntoView({block: 'start', behavior: 'smooth'}), 1000);
             })
         },
         timeOut() {
