@@ -541,15 +541,21 @@ export default {
                             console.log("RESPONSES to immediately add...");
                             console.log(responsesToImmediatelyAdd);
 
+                            responsesToAdd.reverse();
+
                             for (let z = 0; z < responsesToAdd.length; z++) {
 
                                 this.loading = true;
-                                await sleep(1000);
+                                await sleep(500);
                                 response.queryResult.fulfillmentMessages.push(responsesToAdd[z]);
 
                                 let actualResponse = this.generateActualResponses(response, responsesToAdd[z]);
                                 actualResponses.push(actualResponse);
+                                this.suggestionsVisible = true;
                                 this.messages.push(actualResponses[z]);
+
+                                let element = document.getElementById('bottom');
+                                element.scrollIntoView({block: 'start', behavior: 'smooth'});
 
                                 this.loading = false;
                             }
@@ -585,17 +591,34 @@ export default {
         },
 
         generateActualResponses(response, message) {
-            console.log("generatingActualResponses...");
+            console.log("generatingActualResponses => first response =>");
+            console.log(response);
+
+
+            console.log("generatingActualResponses => old message =>");
+            //let r = await response
             console.log(message);
 
-            let newResponse;
+            let newResponse = {
+                queryResult: {
+                    action: response.queryResult.action,
+                    fulfillmentMessages: [message],
+                    fulfillmentText: '',
+                    intent: response.queryResult.intent,
+                    queryText: response.queryResult.queryText
+                }
+            };
 
             response.queryResult.fulfillmentMessages = [];
             response.queryResult.fulfillmentMessages.push(message);
 
-            Object.assign(response, newResponse);
 
-            return response;
+            //newResponse = Object.assign(response, newResponse);
+
+            console.log("generatingActualResponses => new message =>");
+            console.log(newResponse);
+
+            return newResponse;
         },
         removeMyMessage(response) {
             console.log("removeMyMessage...");
