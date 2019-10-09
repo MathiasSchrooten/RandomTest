@@ -17,7 +17,7 @@
                             <table  v-for="m in messages" class="message">
                                 <tr>
                                     <!-- My message -->
-                                    <Bubble v-if="m.queryResult.queryText !== ''" :text="m.queryResult.queryText"   from="me" />
+                                    <Bubble v-if="m.queryResult.queryText !== '' || (meText !== '' && meVisible === true)" :text="m.queryResult.queryText"   from="me" />
 
                                 </tr>
 
@@ -50,7 +50,7 @@
                             <table class="message" v-if="loading">
                                 <tr>
                                     <!-- My message (Loading) -->
-                                    <Bubble from="me" v-if="loading === true" :text="meText" />
+                                    <Bubble from="me" v-if="loading === true && meText !== ''"  :text="meText" />
                                 </tr>
                                 <tr v-if="loading === true">
                                     <Bubble from="bot" :text="loadingText" :isLoading="true" :mp3url="false" :image-url="false" :video-url="false" pdf-url=""/>
@@ -201,6 +201,7 @@ export default {
             videoUrl: false,
             inputAllowed: false,
             suggestionsVisible: true,
+            meVisible: true,
             hey: 'Welcome visitor, what brings you to the Wisemen household today?',
             loadingText: 'LOADINGTEXT',
             meText: '',
@@ -220,7 +221,7 @@ export default {
                     if (last_message[component].name === 'SUGGESTIONS') suggestions.text_suggestions = last_message[component].content;
                     if (last_message[component].name === 'LINK_OUT_SUGGESTION') suggestions.link_suggestion = last_message[component].content;
                     if (last_message[component].name === 'multi_suggestions') {
-                        suggestions.multi_suggestions = last_message[component].content;
+                       // suggestions.multi_suggestions = last_message[component].content;
                     }
                 }
 
@@ -247,6 +248,7 @@ export default {
 
                         suggestionsArray.push(suggestionsArray1);
                         suggestionsArray.push(suggestionsArray2);
+                        console.log("found the 'YES' suggestions!");
                         return suggestionsArray;
                     }
 
@@ -378,7 +380,7 @@ export default {
                     }
 
 
-                    console.log(suggestions.multi_suggestions[0]);
+                    //console.log(suggestions.multi_suggestions[0]);
                     if (suggestions.multi_suggestions.length < 3) {
                         suggestionsArray1.push(suggestions.multi_suggestions[0]);
                         if (suggestions.multi_suggestions.length === 2) {
@@ -503,53 +505,63 @@ export default {
                             let nActualResponses = [];
                             let idsNTextResponse = [];
                             let responsesToImmediatelyAdd = [];
+                            let containsSuggestions = false;
+                            let suggestionsResponse;
 
                             for (let x = 0; x < response.queryResult.fulfillmentMessages.length; x++) {
                                 //console.log("x = " + x);
-                                if (x !== 0 && ( x !== (response.queryResult.fulfillmentMessages.length - 1))) {
-                                    //response.queryResult.queryText = "";
-                                }
-
-                                let newResponse = "";
-                                let backupResponses = response;
-
 
                                 let name = response.queryResult.fulfillmentMessages[x].name;
                                 let content = response.queryResult.fulfillmentMessages[x].content;
 
+                                // console.log(content);
+                                //console.log(name);
+                                //console.log(content);
+
+                                if (name === 'multi_suggestions') {
+                                    containsSuggestions = true;
+                                    suggestionsResponse = await this.extractSuggestions(response.queryResult.fulfillmentMessages[x]);
+                                }
+
                                 if (name === 'DEFAULT' || name === 'multi') {
                                     idsTextResponse.push(x);
                                     textResponsesArray.push(content);
-                                } else {
+                                } else if(name === 'multi_suggestions') {
                                     idsNTextResponse.push(x);
                                     nActualResponses.push(content);
+                                    containsSuggestions = true;
+                                    suggestionsResponse = await this.extractSuggestions(response.queryResult.fulfillmentMessages);
                                 }
-
                             }
 
                             for (let y = idsTextResponse.length - 1; y >= 0; y--) {
                                 responsesToAdd.push(response.queryResult.fulfillmentMessages[idsTextResponse[y]]);
                                 response.queryResult.fulfillmentMessages.splice([idsTextResponse[y]]);
-                                 //console.log("goingToImmediatelyAdd: ");
-                                 //console.log(response.queryResult.fulfillmentMessages)
                             }
 
                             for (let w = idsNTextResponse.length -1; w >= 0; w--) {
-                                responsesToImmediatelyAdd.push(response.queryResult.fulfillmentMessages[idsNTextResponse[w]]);
+                                //responsesToImmediatelyAdd.push(response.queryResult.fulfillmentMessages[idsNTextResponse[w]]);
                             }
 
-                            console.log("RESPONSES to immediately add...");
-                            console.log(responsesToImmediatelyAdd);
-
                             responsesToAdd.reverse();
+                            let isFirstMessage = true;
+
+                            let getFirstResponse = this.getActualResponse(q);
+                            //todo: remove my message
+                            this.meText = "";
+                            this.meVisible = false;
+                            this.messages.push(getFirstResponse);
 
                             for (let z = 0; z < responsesToAdd.length; z++) {
+                                if (isFirstMessage) {
+                                    isFirstMessage = false
+                                }
 
                                 this.loading = true;
-                                await sleep(500);
+                                await sleep(1000);
                                 response.queryResult.fulfillmentMessages.push(responsesToAdd[z]);
 
-                                let actualResponse = this.generateActualResponses(response, responsesToAdd[z]);
+                                let actualResponse = this.generateActualResponses(response, responsesToAdd[z], isFirstMessage);
                                 actualResponses.push(actualResponse);
                                 this.suggestionsVisible = true;
                                 this.messages.push(actualResponses[z]);
@@ -560,8 +572,27 @@ export default {
                                 this.loading = false;
                             }
 
+                            // for (let zz = 0; zz < responsesToImmediatelyAdd.length; zz++) {
+                            //
+                            //     let actualResponse = this.generateActualResponses(response, responsesToAdd[zz], true);
+                            //     actualResponses.push(actualResponse);
+                            //     console.log(">??>>>>>>>> responsesToImmediatelyAdd =====>");
+                            //     console.log(actualResponse);
+                            //     this.suggestionsVisible = true;
+                            //     this.messages.push(actualResponses[zz]);
+                            // }
 
-                            this.loading = false
+                            if (containsSuggestions) {
+                                console.log("contains suggestions => pushing them into messages, suggResponse ===>");
+                                console.log(suggestionsResponse);
+                                //this.messages.push(suggestionsResponse)
+                            }
+
+                            this.loading = false;
+
+                            if (containsSuggestions) {
+                                //this.messages.push(suggestionsResponse);
+                            }
                         } else {
                             this.messages.push(response);
                             this.loading = false
@@ -590,14 +621,35 @@ export default {
 
         },
 
-        generateActualResponses(response, message) {
-            console.log("generatingActualResponses => first response =>");
-            console.log(response);
+        getActualResponse(messageText) {
+            let newResponse = {
+                queryResult: {
+                    action: '',
+                    fulfillmentMessages: [
+                    ],
+                    fulfillmentText: '',
+                    intent: '',
+                    queryText: messageText
+                }
+            };
+            return newResponse
+        },
+
+        generateActualResponses(response, message, isFirstMessage) {
+            // console.log("generatingActualResponses => first response =>");
+            // console.log(response);
 
 
-            console.log("generatingActualResponses => old message =>");
+            //console.log("generatingActualResponses => old message =>");
             //let r = await response
-            console.log(message);
+            //console.log(message);
+            let queryText;
+
+            if (isFirstMessage) {
+                queryText = response.queryResult.queryText
+            } else {
+                queryText = ""
+            }
 
             let newResponse = {
                 queryResult: {
@@ -605,7 +657,7 @@ export default {
                     fulfillmentMessages: [message],
                     fulfillmentText: '',
                     intent: response.queryResult.intent,
-                    queryText: response.queryResult.queryText
+                    queryText: queryText
                 }
             };
 
@@ -615,8 +667,8 @@ export default {
 
             //newResponse = Object.assign(response, newResponse);
 
-            console.log("generatingActualResponses => new message =>");
-            console.log(newResponse);
+            //console.log("generatingActualResponses => new message =>");
+            //console.log(newResponse);
 
             return newResponse;
         },
@@ -626,6 +678,41 @@ export default {
             console.log("response.queryResult.queryText ... => " + response.queryResult.queryText);
             response.queryResult.queryText = "";
             return response
+        },
+
+        extractSuggestions(response) {
+            //console.log("675 raw extract suggestions..");
+            console.log(response);
+            if (response.content !== "" && response.name === 'multi_suggestions') {
+                let newResponse = {
+                    queryResult: {
+                        action: '',
+                        fulfillmentMessages: [],
+                        fulfillmentText: '',
+                        intent: '',
+                        queryText: ''
+                    }
+                };
+                //onsole.log("response.content");
+                //console.log(response.content);
+
+
+                let newButtons = [];
+
+                for (let i = 0; i < response.content.length; i++) {
+                    console.log(response.content[0]);
+                    let button = {
+                        "title": response.content[i].title,
+                        "url": response.content[i].url
+                    };
+                    newButtons.push(button);
+                }
+
+                newResponse.queryResult.fulfillmentMessages.push(newButtons);
+                console.log("RETURNING FROM EXTRACT SUGGESTIONS =>");
+                console.log(newResponse);
+                return newResponse
+            }
         },
 
         hasMultipleAnswers(response) {
