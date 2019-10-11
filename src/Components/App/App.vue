@@ -2,7 +2,7 @@
     <div >
         <div style="display: flex;justify-content: flex-end; width: 100%; height: 80%;">
             <main id="app" >
-                <div style="width: 100%; height: 100%; overflow-y: scroll">
+                <div style="width: 100%; height: 100%; overflow-y: auto">
                     <TopHead v-if="app && messages.length > 0" :app="app"></TopHead>
                     <section class="container chat-container">
 
@@ -42,7 +42,7 @@
                                         <List @select="send" :items="component.content.items" :title="component.content.title" v-if="component.name == 'LIST'" />
 
                                         <!-- Webhook Image -->
-                                        <Picture v-if="component.name == 'IMAGE'" :image="component.content" />
+                                        <Picture v-if="component.name === 'IMAGE'" :image="component.content" />
 
                                 </tr>
                             </table>
@@ -154,7 +154,7 @@ body
     color: #202124
 
 .carousel
-    overflow-x: scroll
+    overflow-x: hidden
     overflow-y: hidden
     white-space: nowrap
     -webkit-overflow-scrolling: touch
@@ -206,66 +206,178 @@ export default {
             loadingText: 'LOADINGTEXT',
             meText: '',
             lastRequestedMessage: '',
+            intentName: ''
         };
     },
+
     created(){
     },
     computed: {
         /* The code below is used to extract suggestions from last message, to display it on ChatInput */
-        suggestions(){
-            if(this.messages.length > 0){
-                let last_message = this.messages[this.messages.length - 1].queryResult.fulfillmentMessages;
-                let suggestions = [];
+        suggestions: {
+            get: function() {
+                if(this.messages.length > 0){
+                    let last_message = this.messages[this.messages.length - 1].queryResult.fulfillmentMessages;
+                    let suggestions = [];
 
-                for (let component in last_message){
-                    if (last_message[component].name === 'SUGGESTIONS') suggestions.text_suggestions = last_message[component].content;
-                    if (last_message[component].name === 'LINK_OUT_SUGGESTION') suggestions.link_suggestion = last_message[component].content;
-                    if (last_message[component].name === 'multi_suggestions') {
-                       // suggestions.multi_suggestions = last_message[component].content;
+                    for (let component in last_message){
+                        if (last_message[component].name === 'SUGGESTIONS') suggestions.text_suggestions = last_message[component].content;
+                        if (last_message[component].name === 'LINK_OUT_SUGGESTION') suggestions.link_suggestion = last_message[component].content;
+                        if (last_message[component].name === 'multi_suggestions') {
+                        }
                     }
-                }
 
-                if (suggestions.multi_suggestions !== undefined) {
-                    this.suggestionsVisible = true;
                     let suggestionsArray = [];
                     let suggestionsArray1 = [];
                     let suggestionsArray2 = [];
                     let suggestionsArray3 = [];
                     let suggestionsArray4 = [];
 
-                    if (suggestions.multi_suggestions[0].title === 'Read more') {
-                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
+                    if (this.intentName === 'capture.methodOfContact.ui') {
+                        let suggestions = this.config.app.stop_suggs;
+
+                        suggestionsArray1.push(suggestions[0]);
+
+                        suggestionsArray.push(suggestionsArray1);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'capture.lastName') {
+                        let suggestions = this.config.app.skip3_suggs;
+
+                        suggestionsArray1.push(suggestions[0]);
+
+                        suggestionsArray.push(suggestionsArray1);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'haveadrink.beer' || this.intentName === 'haveadrink.champagne'
+                        || this.intentName === 'haveadrink.cocktail' || this.intentName === 'haveadrink.coffee' || this.intentName === 'haveadrink.martini' || this.intentName === 'haveadrink.whiskey' || this.intentName === 'haveadrink.wine'
+                        || this.intentName === 'workingonproject.alreadylaunched' || this.intentName === 'workingonproject.design' || this.intentName === 'workingonproject.developing' || this.intentName === 'workingonproject.idea') {
+                        let suggestions = this.config.app.skip_suggs;
+
+                        suggestionsArray1.push(suggestions[0]);
+
+                        suggestionsArray.push(suggestionsArray1);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'capture.methodOfContact') {
+                        let suggestions = this.config.app.skip2_suggs;
+
+                        suggestionsArray1.push(suggestions[0]);
+
+                        suggestionsArray.push(suggestionsArray1);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'jointeam') {
+                        let suggestions = this.config.app.join_team_suggestions;
+
+                        suggestionsArray1.push(suggestions[0]);
+                        suggestionsArray1.push(suggestions[1]);
+
+                        suggestionsArray.push(suggestionsArray1);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'a.cancelStop' || this.intentName === 'capture.lastName.stop' || this.intentName === 'capture.methodOfContact.call.confirm' || this.intentName === 'capture.methodOfContact.confirm'
+                    || this.intentName === 'capture.methodOfContact.email.confirm' || this.intentName === 'capture.methodOfContact.email.stop' || this.intentName === 'capture.methodOfContact.stop' || this.intentName === 'Default Fallback Intent'
+                    || this.intentName === 'Default Welcome Intent' || this.intentName === 'digitallyrelevant.originstory.goback' || this.intentName === 'handle.design.explore.no' || this.intentName === 'handle.design.explore.yes'
+                    || this.intentName === 'handle.design.plan.no' || this.intentName === 'handle.design.plan.yes' || this.intentName === 'handle.design.ux.yes' || this.intentName === 'handle.design.ux.no' || this.intentName === 'handle.design.validate.yes'
+                    || this.intentName === 'handle.design.validate.no' || this.intentName === 'handle.develop.mlp.no' || this.intentName === 'handle.develop.mlp.yes' || this.intentName === 'handle.grow.cs.yes' || this.intentName === 'handle.grow.cs.no'
+                    || this.intentName === 'handle.grow.dm.yes' || this.intentName === 'handle.grow.dm.no' || this.intentName === 'handle.grow.sla.yes' || this.intentName === 'handle.grow.sla.no' || this.intentName === 'jointeam.no'
+                    || this.intentName === 'jointeam.yes' || this.intentName === 'newuser_welcome' || this.intentName === 'digitallyrelevant.originstory.readmore.goback') {
+                        let suggestions = this.config.app.start_suggestions;
+
+                        suggestionsArray1.push(suggestions[0]);
+                        suggestionsArray2.push(suggestions[1]);
+                        suggestionsArray2.push(suggestions[3]);
+                        suggestionsArray3.push(suggestions[2]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'workingonproject') {
+                        let suggestions = this.config.app.workingonproject;
+
+                        suggestionsArray1.push(suggestions[3]);
+                        suggestionsArray2.push(suggestions[1]);
+                        suggestionsArray2.push(suggestions[2]);
+                        suggestionsArray3.push(suggestions[0]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'handle') {
+                        let suggestions = this.config.app.handle;
+
+                        suggestionsArray1.push(suggestions[0]);
+                        suggestionsArray1.push(suggestions[1]);
+                        suggestionsArray1.push(suggestions[2]);
+                        suggestionsArray2.push(suggestions[3]);
 
                         suggestionsArray.push(suggestionsArray1);
                         suggestionsArray.push(suggestionsArray2);
                         return suggestionsArray;
                     }
 
-                    if (suggestions.multi_suggestions[0].title === 'Yes') {
-                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
+                    if (this.intentName === 'handle.grow.cs') {
+                        let suggs = this.config.app.handle_grow_cs;
 
-                        suggestionsArray.push(suggestionsArray1);
-                        suggestionsArray.push(suggestionsArray2);
-                        console.log("found the 'YES' suggestions!");
-                        return suggestionsArray;
-                    }
-
-                    if (suggestions.multi_suggestions[0].title === 'Iterative Development') {
-                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray2.push(suggs[1]);
 
                         suggestionsArray.push(suggestionsArray1);
                         suggestionsArray.push(suggestionsArray2);
                         return suggestionsArray;
                     }
 
-                    if (suggestions.multi_suggestions[0].title === 'Design 🎨') {
-                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
-                        suggestionsArray3.push(suggestions.multi_suggestions[2]);
-                        suggestionsArray4.push(suggestions.multi_suggestions[3]);
+                    if (this.intentName === 'handle.grow.sla') {
+                        let suggs = this.config.app.handle_grow_sla;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray2.push(suggs[1]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'handle.grow.dm') {
+                        let suggs = this.config.app.handle_grow_dm;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray2.push(suggs[1]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'handle.grow') {
+                        let suggestions = this.config.app.handle_grow;
+
+                        suggestionsArray2.push(suggestions[0]);
+                        suggestionsArray2.push(suggestions[1]);
+                        suggestionsArray2.push(suggestions[2]);
+                        suggestionsArray3.push(suggestions[3]);
+                        suggestionsArray3.push(suggestions[4]);
+                        suggestionsArray4.push(suggestions[5]);
+                        suggestionsArray4.push(suggestions[6]);
 
                         suggestionsArray.push(suggestionsArray1);
                         suggestionsArray.push(suggestionsArray2);
@@ -274,71 +386,17 @@ export default {
                         return suggestionsArray;
                     }
 
-                    if (suggestions.multi_suggestions[0].title === 'I want to increase my digital return on investment 💻') {
-                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[3]);
-                        suggestionsArray3.push(suggestions.multi_suggestions[2]);
+                    if (this.intentName === 'handle.design') {
+                        let suggestions = this.config.app.handle_design;
 
-
-                        suggestionsArray.push(suggestionsArray1);
-                        suggestionsArray.push(suggestionsArray2);
-                        suggestionsArray.push(suggestionsArray3);
-                        suggestionsArray.push(suggestionsArray4);
-
-                        return suggestionsArray;
-                    }
-
-                    if (suggestions.multi_suggestions[0].title === 'The origin story') {
-                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
-                        suggestionsArray3.push(suggestions.multi_suggestions[2]);
-                       // suggestionsArray4.push(suggestions.multi_suggestions[3]);
-
-                        suggestionsArray.push(suggestionsArray1);
-                        suggestionsArray.push(suggestionsArray2);
-                        suggestionsArray.push(suggestionsArray3);
-                        //suggestionsArray.push(suggestionsArray4);
-                        return suggestionsArray;
-                    }
-
-                    if (suggestions.multi_suggestions[0].title === 'I have an idea 💡') {
-                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
-                        suggestionsArray3.push(suggestions.multi_suggestions[2]);
-                        suggestionsArray4.push(suggestions.multi_suggestions[3]);
-
-                        suggestionsArray.push(suggestionsArray1);
-                        suggestionsArray.push(suggestionsArray2);
-                        suggestionsArray.push(suggestionsArray3);
-                        suggestionsArray.push(suggestionsArray4);
-
-                        return suggestionsArray;
-                    }
-
-                    //
-
-                    //How we handle things
-                    if (suggestions.multi_suggestions[0].title === 'How we handle things') {
-                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[1]);
-                        suggestionsArray3.push(suggestions.multi_suggestions[2]);
-
-                        suggestionsArray.push(suggestionsArray1);
-                        suggestionsArray.push(suggestionsArray2);
-                        suggestionsArray.push(suggestionsArray3);
-                        return suggestionsArray;
-                    }
-
-                    if (suggestions.multi_suggestions[0].title === 'Ideation') {
-                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
-                        suggestionsArray1.push(suggestions.multi_suggestions[1]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[2]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[3]);
-                        suggestionsArray3.push(suggestions.multi_suggestions[4]);
-                        suggestionsArray3.push(suggestions.multi_suggestions[5]);
-                        suggestionsArray4.push(suggestions.multi_suggestions[6]);
-                        suggestionsArray4.push(suggestions.multi_suggestions[7]);
+                        suggestionsArray2.push(suggestions[0]);
+                        suggestionsArray2.push(suggestions[1]);
+                        suggestionsArray4.push(suggestions[2]);
+                        suggestionsArray4.push(suggestions[3]);
+                        suggestionsArray4.push(suggestions[4]);
+                        suggestionsArray3.push(suggestions[5]);
+                        suggestionsArray3.push(suggestions[6]);
+                        suggestionsArray3.push(suggestions[7]);
 
                         suggestionsArray.push(suggestionsArray1);
                         suggestionsArray.push(suggestionsArray2);
@@ -347,30 +405,249 @@ export default {
                         return suggestionsArray;
                     }
 
-                    if (suggestions.multi_suggestions[0].title === 'Go to Market') {
-                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
-                        suggestionsArray1.push(suggestions.multi_suggestions[1]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[2]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[3]);
-                        suggestionsArray3.push(suggestions.multi_suggestions[4]);
-                        suggestionsArray3.push(suggestions.multi_suggestions[5]);
-                        suggestionsArray4.push(suggestions.multi_suggestions[6]);
+                    if (this.intentName === 'handle.develop') {
+                        let suggs = this.config.app.handle_develop;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray2.push(suggs[1]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'handle.develop.mlp') {
+                        let suggs = this.config.app.handle_develop_mlp;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray2.push(suggs[1]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'handle.design.explore') {
+                        let suggs = this.config.app.handle_design_explore;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray2.push(suggs[1]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'handle.design.validate') {
+                        let suggs = this.config.app.handle_design_validate;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray2.push(suggs[1]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'handle.design.plan') {
+                        let suggs = this.config.app.handle_design_plan;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray2.push(suggs[1]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'handle.design.ux') {
+                        let suggs = this.config.app.handle_design_ux;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray2.push(suggs[1]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        return suggestionsArray;
+                    }
+
+
+                    if (this.intentName === 'digitallyrelevant') {
+                        let suggs = this.config.app.origin_handle_conquered_suggs;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray2.push(suggs[1]);
+                        suggestionsArray3.push(suggs[2]);
 
                         suggestionsArray.push(suggestionsArray1);
                         suggestionsArray.push(suggestionsArray2);
                         suggestionsArray.push(suggestionsArray3);
-                        suggestionsArray.push(suggestionsArray4);
                         return suggestionsArray;
                     }
 
-                    if (suggestions.multi_suggestions[0].title === '🍺') {
-                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
-                        suggestionsArray1.push(suggestions.multi_suggestions[1]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[2]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[3]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[4]);
-                        suggestionsArray3.push(suggestions.multi_suggestions[5]);
-                        suggestionsArray3.push(suggestions.multi_suggestions[6]);
+                    if (this.intentName === 'haveadrink') {
+                        let suggestions = this.config.app.drinks;
+
+                        suggestionsArray1.push(suggestions[0]);
+                        suggestionsArray1.push(suggestions[1]);
+                        suggestionsArray1.push(suggestions[2]);
+                        suggestionsArray2.push(suggestions[3]);
+                        suggestionsArray2.push(suggestions[4]);
+                        suggestionsArray2.push(suggestions[5]);
+                        suggestionsArray2.push(suggestions[6]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'digitallyrelevant.originstory.readmore.more') {
+                        let suggs = this.config.app.you_bet_suggs;
+
+                        suggestionsArray1.push(suggs[0]);
+
+                        suggestionsArray.push(suggestionsArray1);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'digitallyrelevant.youbet') {
+                        let suggs = this.config.app.you_bet;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray2.push(suggs[1]);
+                        suggestionsArray3.push(suggs[2]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'digitallyrelevant.originstory' || this.intentName === 'digitallyrelevant.originstory.readmore') {
+                        let suggs = this.config.app.read_more;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray2.push(suggs[1]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'digitallyrelevant.conqueredtechnologies') {
+                        let suggs = this.config.app.conquered_tech;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray1.push(suggs[1]);
+                        suggestionsArray2.push(suggs[2]);
+                        suggestionsArray2.push(suggs[3]);
+                        suggestionsArray3.push(suggs[4]);
+                        suggestionsArray3.push(suggs[5]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'digitallyrelevant.conqueredtechnologies.ai') {
+                        let suggs = this.config.app.conquered_tech;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray1.push(suggs[1]);
+                        suggestionsArray2.push(suggs[2]);
+                        suggestionsArray2.push(suggs[3]);
+                        suggestionsArray3.push(suggs[4]);
+                        suggestionsArray3.push(suggs[5]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'digitallyrelevant.conqueredtechnologies.arvr') {
+                        let suggs = this.config.app.conquered_tech_arvr;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray1.push(suggs[1]);
+                        suggestionsArray2.push(suggs[2]);
+                        suggestionsArray2.push(suggs[3]);
+                        suggestionsArray3.push(suggs[4]);
+                        suggestionsArray3.push(suggs[5]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'digitallyrelevant.conqueredtechnologies.conversational') {
+                        let suggs = this.config.app.conquered_tech_conv;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray1.push(suggs[1]);
+                        suggestionsArray2.push(suggs[2]);
+                        suggestionsArray2.push(suggs[3]);
+                        suggestionsArray3.push(suggs[4]);
+                        suggestionsArray3.push(suggs[5]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'digitallyrelevant.conqueredtechnologies.iot') {
+                        let suggs = this.config.app.conquered_tech_iot;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray1.push(suggs[1]);
+                        suggestionsArray2.push(suggs[2]);
+                        suggestionsArray2.push(suggs[3]);
+                        suggestionsArray3.push(suggs[4]);
+                        suggestionsArray3.push(suggs[5]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+
+                        return suggestionsArray;
+                    }
+
+                    if (this.intentName === 'digitallyrelevant.conqueredtechnologies.mobile') {
+                        let suggs = this.config.app.conquered_tech_mobile;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray1.push(suggs[1]);
+                        suggestionsArray2.push(suggs[2]);
+                        suggestionsArray2.push(suggs[3]);
+                        suggestionsArray3.push(suggs[4]);
+                        suggestionsArray3.push(suggs[5]);
+
+                        suggestionsArray.push(suggestionsArray1);
+                        suggestionsArray.push(suggestionsArray2);
+                        suggestionsArray.push(suggestionsArray3);
+
+                        return suggestionsArray;
+                    }
+                    if (this.intentName === 'digitallyrelevant.conqueredtechnologies.rpa') {
+                        let suggs = this.config.app.conquered_tech_rpa;
+
+                        suggestionsArray1.push(suggs[0]);
+                        suggestionsArray1.push(suggs[1]);
+                        suggestionsArray2.push(suggs[2]);
+                        suggestionsArray2.push(suggs[3]);
+                        suggestionsArray3.push(suggs[4]);
+                        suggestionsArray3.push(suggs[5]);
 
                         suggestionsArray.push(suggestionsArray1);
                         suggestionsArray.push(suggestionsArray2);
@@ -380,90 +657,273 @@ export default {
                     }
 
 
-                    //console.log(suggestions.multi_suggestions[0]);
-                    if (suggestions.multi_suggestions.length < 3) {
-                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
-                        if (suggestions.multi_suggestions.length === 2) {
-                            suggestionsArray1.push(suggestions.multi_suggestions[1]);
+                        if (suggestions.multi_suggestions !== undefined) {
+                        this.suggestionsVisible = true;
+                        let suggestionsArray = [];
+                        let suggestionsArray1 = [];
+                        let suggestionsArray2 = [];
+                        let suggestionsArray3 = [];
+                        let suggestionsArray4 = [];
+
+                        //("CALCULATING SUGGESTIONS =<><><>");
+
+                        if (suggestions.multi_suggestions[0].title === 'Read more') {
+                            suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[1]);
+
+                            suggestionsArray.push(suggestionsArray1);
+                            suggestionsArray.push(suggestionsArray2);
+
+                            return suggestionsArray;
                         }
-                        suggestionsArray.push(suggestionsArray1);
-                    }
 
-                    if (suggestions.multi_suggestions.length > 2 && suggestions.multi_suggestions.length <= 4) {
-                        suggestionsArray1.push(suggestions.multi_suggestions[0]);
-                        suggestionsArray1.push(suggestions.multi_suggestions[1]);
-                        suggestionsArray2.push(suggestions.multi_suggestions[2]);
-                        if (suggestions.multi_suggestions.length === 4) {
+                        if (suggestions.multi_suggestions[0].title === 'Yes') {
+                            suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[1]);
+
+                            suggestionsArray.push(suggestionsArray1);
+                            suggestionsArray.push(suggestionsArray2);
+
+                            return suggestionsArray;
+                        }
+
+                        if (suggestions.multi_suggestions[0].title === 'Iterative Development') {
+                            suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[1]);
+
+                            suggestionsArray.push(suggestionsArray1);
+                            suggestionsArray.push(suggestionsArray2);
+
+                            return suggestionsArray;
+                        }
+
+                        if (suggestions.multi_suggestions[0].title === 'Design 🎨') {
+                            suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[1]);
+                            suggestionsArray3.push(suggestions.multi_suggestions[2]);
+                            suggestionsArray4.push(suggestions.multi_suggestions[3]);
+
+                            suggestionsArray.push(suggestionsArray1);
+                            suggestionsArray.push(suggestionsArray2);
+                            suggestionsArray.push(suggestionsArray3);
+                            suggestionsArray.push(suggestionsArray4);
+
+                            return suggestionsArray;
+                        }
+
+                        if (suggestions.multi_suggestions[0].title === 'I want to increase my digital return on investment 💻') {
+                            suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[1]);
                             suggestionsArray2.push(suggestions.multi_suggestions[3]);
+                            suggestionsArray3.push(suggestions.multi_suggestions[2]);
+
+
+                            suggestionsArray.push(suggestionsArray1);
+                            suggestionsArray.push(suggestionsArray2);
+                            suggestionsArray.push(suggestionsArray3);
+                            suggestionsArray.push(suggestionsArray4);
+
+                            return suggestionsArray;
                         }
-                        suggestionsArray.push(suggestionsArray1);
-                        suggestionsArray.push(suggestionsArray2);
-                    } else {
-                        if (suggestions.multi_suggestions.length > 4 && suggestions.multi_suggestions.length <= 6) {
+
+                        if (suggestions.multi_suggestions[0].title === 'The origin story') {
+                            suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[1]);
+                            suggestionsArray3.push(suggestions.multi_suggestions[2]);
+
+                            suggestionsArray.push(suggestionsArray1);
+                            suggestionsArray.push(suggestionsArray2);
+                            suggestionsArray.push(suggestionsArray3);
+
+                            return suggestionsArray;
+                        }
+
+                        if (suggestions.multi_suggestions[0].title === 'I have an idea 💡') {
+                            suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[1]);
+                            suggestionsArray3.push(suggestions.multi_suggestions[2]);
+                            suggestionsArray4.push(suggestions.multi_suggestions[3]);
+
+                            suggestionsArray.push(suggestionsArray1);
+                            suggestionsArray.push(suggestionsArray2);
+                            suggestionsArray.push(suggestionsArray3);
+                            suggestionsArray.push(suggestionsArray4);
+
+                            return suggestionsArray;
+                        }
+
+                        //How we handle things
+                        if (suggestions.multi_suggestions[0].title === 'How we handle things') {
+                            suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[1]);
+                            suggestionsArray3.push(suggestions.multi_suggestions[2]);
+
+                            suggestionsArray.push(suggestionsArray1);
+                            suggestionsArray.push(suggestionsArray2);
+                            suggestionsArray.push(suggestionsArray3);
+
+                            return suggestionsArray;
+                        }
+
+                        if (suggestions.multi_suggestions[0].title === 'Ideation') {
                             suggestionsArray1.push(suggestions.multi_suggestions[0]);
                             suggestionsArray1.push(suggestions.multi_suggestions[1]);
                             suggestionsArray2.push(suggestions.multi_suggestions[2]);
                             suggestionsArray2.push(suggestions.multi_suggestions[3]);
                             suggestionsArray3.push(suggestions.multi_suggestions[4]);
-                            if (suggestions.multi_suggestions.length === 6) {
-                                suggestionsArray3.push(suggestions.multi_suggestions[5]);
-                            }
+                            suggestionsArray3.push(suggestions.multi_suggestions[5]);
+                            suggestionsArray4.push(suggestions.multi_suggestions[6]);
+                            suggestionsArray4.push(suggestions.multi_suggestions[7]);
+
                             suggestionsArray.push(suggestionsArray1);
                             suggestionsArray.push(suggestionsArray2);
                             suggestionsArray.push(suggestionsArray3);
+                            suggestionsArray.push(suggestionsArray4);
+
+                            return suggestionsArray;
+                        }
+
+                        if (suggestions.multi_suggestions[0].title === 'Go to Market') {
+                            suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                            suggestionsArray1.push(suggestions.multi_suggestions[1]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[2]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[3]);
+                            suggestionsArray3.push(suggestions.multi_suggestions[4]);
+                            suggestionsArray3.push(suggestions.multi_suggestions[5]);
+                            suggestionsArray4.push(suggestions.multi_suggestions[6]);
+
+                            suggestionsArray.push(suggestionsArray1);
+                            suggestionsArray.push(suggestionsArray2);
+                            suggestionsArray.push(suggestionsArray3);
+                            suggestionsArray.push(suggestionsArray4);
+
+                            return suggestionsArray;
+                        }
+
+                        if (suggestions.multi_suggestions[0].title === '🍺') {
+                            suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                            suggestionsArray1.push(suggestions.multi_suggestions[1]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[2]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[3]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[4]);
+                            suggestionsArray3.push(suggestions.multi_suggestions[5]);
+                            suggestionsArray3.push(suggestions.multi_suggestions[6]);
+
+                            suggestionsArray.push(suggestionsArray1);
+                            suggestionsArray.push(suggestionsArray2);
+                            suggestionsArray.push(suggestionsArray3);
+
+                            return suggestionsArray;
+                        }
+
+                        //console.log(suggestions.multi_suggestions[0]);
+                        if (suggestions.multi_suggestions.length < 3) {
+                            suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                            if (suggestions.multi_suggestions.length === 2) {
+                                suggestionsArray1.push(suggestions.multi_suggestions[1]);
+                            }
+                            suggestionsArray.push(suggestionsArray1);
+                        }
+
+                        if (suggestions.multi_suggestions.length > 2 && suggestions.multi_suggestions.length <= 4) {
+                            suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                            suggestionsArray1.push(suggestions.multi_suggestions[1]);
+                            suggestionsArray2.push(suggestions.multi_suggestions[2]);
+                            if (suggestions.multi_suggestions.length === 4) {
+                                suggestionsArray2.push(suggestions.multi_suggestions[3]);
+                            }
+                            suggestionsArray.push(suggestionsArray1);
+                            suggestionsArray.push(suggestionsArray2);
                         } else {
-                            if (suggestions.multi_suggestions.length > 6 && suggestions.multi_suggestions.length <= 8) {
+                            if (suggestions.multi_suggestions.length > 4 && suggestions.multi_suggestions.length <= 6) {
                                 suggestionsArray1.push(suggestions.multi_suggestions[0]);
                                 suggestionsArray1.push(suggestions.multi_suggestions[1]);
                                 suggestionsArray2.push(suggestions.multi_suggestions[2]);
                                 suggestionsArray2.push(suggestions.multi_suggestions[3]);
                                 suggestionsArray3.push(suggestions.multi_suggestions[4]);
-                                suggestionsArray3.push(suggestions.multi_suggestions[5]);
-                                suggestionsArray4.push(suggestions.multi_suggestions[6]);
-
-                                if (suggestions.multi_suggestions.length === 8) {
-                                    suggestionsArray4.push(suggestions.multi_suggestions[7]);
+                                if (suggestions.multi_suggestions.length === 6) {
+                                    suggestionsArray3.push(suggestions.multi_suggestions[5]);
                                 }
                                 suggestionsArray.push(suggestionsArray1);
                                 suggestionsArray.push(suggestionsArray2);
                                 suggestionsArray.push(suggestionsArray3);
-                                suggestionsArray.push(suggestionsArray4);
+                            } else {
+                                if (suggestions.multi_suggestions.length > 6 && suggestions.multi_suggestions.length <= 8) {
+                                    suggestionsArray1.push(suggestions.multi_suggestions[0]);
+                                    suggestionsArray1.push(suggestions.multi_suggestions[1]);
+                                    suggestionsArray2.push(suggestions.multi_suggestions[2]);
+                                    suggestionsArray2.push(suggestions.multi_suggestions[3]);
+                                    suggestionsArray3.push(suggestions.multi_suggestions[4]);
+                                    suggestionsArray3.push(suggestions.multi_suggestions[5]);
+                                    suggestionsArray4.push(suggestions.multi_suggestions[6]);
+
+                                    if (suggestions.multi_suggestions.length === 8) {
+                                        suggestionsArray4.push(suggestions.multi_suggestions[7]);
+                                    }
+                                    suggestionsArray.push(suggestionsArray1);
+                                    suggestionsArray.push(suggestionsArray2);
+                                    suggestionsArray.push(suggestionsArray3);
+                                    suggestionsArray.push(suggestionsArray4);
+                                }
                             }
                         }
+
+                        return suggestionsArray;
                     }
+                } else {
+
+                    let suggestionsArray = [];
+                    let suggestionsArray1 = [];
+                    let suggestionsArray2 = [];
+                    let suggestionsArray3 = [];
+
+                    let suggestions = this.config.app.start_suggestions;
+
+                    suggestionsArray1.push(suggestions[0]);
+                    suggestionsArray2.push(suggestions[1]);
+                    suggestionsArray2.push(suggestions[3]);
+                    suggestionsArray3.push(suggestions[2]);
+
+                    suggestionsArray.push(suggestionsArray1);
+                    suggestionsArray.push(suggestionsArray2);
+                    suggestionsArray.push(suggestionsArray3);
 
                     return suggestionsArray;
                 }
-
-            } else {
-                let suggestionsArray = [];
-                let suggestionsArray1 = [];
-                let suggestionsArray2 = [];
-                let suggestionsArray3 = [];
-
-                let suggestions = this.config.app.start_suggestions;
-
-                suggestionsArray1.push(suggestions[0]);
-                suggestionsArray2.push(suggestions[1]);
-                suggestionsArray2.push(suggestions[3]);
-                suggestionsArray3.push(suggestions[2]);
-
-                suggestionsArray.push(suggestionsArray1);
-                suggestionsArray.push(suggestionsArray2);
-                suggestionsArray.push(suggestionsArray3);
-
-                return suggestionsArray;
+            },
+            set: function (newSuggestions) {
+                this.suggestions = newSuggestions
             }
+
+        }
+
+    },
+    mutations: {
+        updateSuggestions (state, suggestions) {
+            state.suggestions = suggestions;
         }
     },
     watch: {
         /* This function is triggered, when new messages arrive */
-        messages(messages){
+        messages(messages) {
             //TODO: comment this for dev, uncomment for prod
         },
-
     },
     methods: {
+        showSuggestionsByIntent(intentName) {
+            //console.log("intentname =");
+            //console.log(intentName);
+
+            if (intentName === 'jointeam') {
+                let yesSuggestions = [
+                    [{"title": "yes", "url": "https://www.google.com"}],
+
+                ];
+            }
+        },
+        addSuggestions(suggestions) {
+            this.suggestions = suggestions
+        },
         async send(q){
             if (this.lastRequestedMessage !== q || q === 'Read more') {
                 //TODO: add userId to getBotResponse
@@ -472,15 +932,13 @@ export default {
                     "text": q,
                     "languageCode": this.lang(),
                     "userId": window.location.pathname
-                    //"userId": userId
-                }; // <- this is how a Dialogflow request look like
+                };
                 this.lastRequestedMessage = q;
 
                 this.loadingText = '';
 
                 let element = document.getElementById('bottom');
                 setTimeout(() => element.scrollIntoView({block: 'start', behavior: 'smooth'}), 1);
-
 
                 this.meText = q;
                 this.loading = true;
@@ -496,6 +954,12 @@ export default {
                     .then(async response => {
                         this.inputAllowed = response.inputAllowed;
 
+                        this.intentName = response.queryResult.intent.displayName;
+                        //this.suggestions = this.config.app.start_suggestions;
+                        //this.addSuggestions(this.config.app.start_suggestions);
+
+                        this.suggestionsVisible = true;
+
                         if (this.hasMultipleAnswers(response)) {
 
                             let idsTextResponse = [];
@@ -509,14 +973,9 @@ export default {
                             let suggestionsResponse;
 
                             for (let x = 0; x < response.queryResult.fulfillmentMessages.length; x++) {
-                                //console.log("x = " + x);
 
                                 let name = response.queryResult.fulfillmentMessages[x].name;
                                 let content = response.queryResult.fulfillmentMessages[x].content;
-
-                                // console.log(content);
-                                //console.log(name);
-                                //console.log(content);
 
                                 if (name === 'multi_suggestions') {
                                     containsSuggestions = true;
@@ -529,8 +988,8 @@ export default {
                                 } else if(name === 'multi_suggestions') {
                                     idsNTextResponse.push(x);
                                     nActualResponses.push(content);
-                                    containsSuggestions = true;
-                                    suggestionsResponse = await this.extractSuggestions(response.queryResult.fulfillmentMessages);
+                                    //containsSuggestions = true;
+                                    //suggestionsResponse = await this.extractSuggestions(response.queryResult.fulfillmentMessages);
                                 }
                             }
 
@@ -539,15 +998,10 @@ export default {
                                 response.queryResult.fulfillmentMessages.splice([idsTextResponse[y]]);
                             }
 
-                            for (let w = idsNTextResponse.length -1; w >= 0; w--) {
-                                //responsesToImmediatelyAdd.push(response.queryResult.fulfillmentMessages[idsNTextResponse[w]]);
-                            }
-
                             responsesToAdd.reverse();
                             let isFirstMessage = true;
 
                             let getFirstResponse = this.getActualResponse(q);
-                            //todo: remove my message
                             this.meText = "";
                             this.meVisible = false;
                             this.messages.push(getFirstResponse);
@@ -572,27 +1026,7 @@ export default {
                                 this.loading = false;
                             }
 
-                            // for (let zz = 0; zz < responsesToImmediatelyAdd.length; zz++) {
-                            //
-                            //     let actualResponse = this.generateActualResponses(response, responsesToAdd[zz], true);
-                            //     actualResponses.push(actualResponse);
-                            //     console.log(">??>>>>>>>> responsesToImmediatelyAdd =====>");
-                            //     console.log(actualResponse);
-                            //     this.suggestionsVisible = true;
-                            //     this.messages.push(actualResponses[zz]);
-                            // }
-
-                            if (containsSuggestions) {
-                                console.log("contains suggestions => pushing them into messages, suggResponse ===>");
-                                console.log(suggestionsResponse);
-                                //this.messages.push(suggestionsResponse)
-                            }
-
                             this.loading = false;
-
-                            if (containsSuggestions) {
-                                //this.messages.push(suggestionsResponse);
-                            }
                         } else {
                             this.messages.push(response);
                             this.loading = false
@@ -605,19 +1039,17 @@ export default {
                     let element = document.getElementById('bottom');
                     //element.scrollIntoView({block: 'start', behavior: 'smooth'});
                     this.suggestionsVisible = true;
+                    //this.$refs.chatInput.focus();
 
                     setTimeout(function() {
                         element.scrollIntoView({block: 'start', behavior: 'smooth'});
-                        this.suggestionsVisible = true;
+                        //this.suggestionsVisible = true;
                     }.bind(this), 1000);
                     if (this.inputAllowed) {
-                        this.$refs.chatInput.focusNow();
+
                     }
                 })
             }
-
-        },
-        timeOut() {
 
         },
 
@@ -636,13 +1068,6 @@ export default {
         },
 
         generateActualResponses(response, message, isFirstMessage) {
-            // console.log("generatingActualResponses => first response =>");
-            // console.log(response);
-
-
-            //console.log("generatingActualResponses => old message =>");
-            //let r = await response
-            //console.log(message);
             let queryText;
 
             if (isFirstMessage) {
@@ -664,12 +1089,6 @@ export default {
             response.queryResult.fulfillmentMessages = [];
             response.queryResult.fulfillmentMessages.push(message);
 
-
-            //newResponse = Object.assign(response, newResponse);
-
-            //console.log("generatingActualResponses => new message =>");
-            //console.log(newResponse);
-
             return newResponse;
         },
         removeMyMessage(response) {
@@ -681,8 +1100,7 @@ export default {
         },
 
         extractSuggestions(response) {
-            //console.log("675 raw extract suggestions..");
-            console.log(response);
+
             if (response.content !== "" && response.name === 'multi_suggestions') {
                 let newResponse = {
                     queryResult: {
@@ -693,14 +1111,10 @@ export default {
                         queryText: ''
                     }
                 };
-                //onsole.log("response.content");
-                //console.log(response.content);
-
 
                 let newButtons = [];
 
                 for (let i = 0; i < response.content.length; i++) {
-                    console.log(response.content[0]);
                     let button = {
                         "title": response.content[i].title,
                         "url": response.content[i].url
@@ -708,16 +1122,19 @@ export default {
                     newButtons.push(button);
                 }
 
-                newResponse.queryResult.fulfillmentMessages.push(newButtons);
-                console.log("RETURNING FROM EXTRACT SUGGESTIONS =>");
-                console.log(newResponse);
+                let responseName = {
+                    name: "multi_suggestions",
+                    content: []
+                };
+                responseName.content.push(newButtons);
+                newResponse.queryResult.fulfillmentMessages.push(responseName);
                 return newResponse
             }
         },
 
         hasMultipleAnswers(response) {
-            console.log("has multiple answers? ");
-            console.log(response);
+            //console.log("has multiple answers? ");
+            //console.log(response);
             let fulfillment = response.queryResult.fulfillmentMessages;
 
             console.log(fulfillment.length);

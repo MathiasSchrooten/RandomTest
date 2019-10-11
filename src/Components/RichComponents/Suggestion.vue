@@ -14,11 +14,11 @@
     max-width: 100%
     margin-right: 5px
     margin-bottom: 5px
-    font-size: 0.75em
+    font-size: 0.83em
     padding: 6px
 
     @media screen and (max-width: 700px)
-        font-size: 0.75em
+        font-size: 0.83em
 
 .suggestionEmoticon
     //display: inline-block
